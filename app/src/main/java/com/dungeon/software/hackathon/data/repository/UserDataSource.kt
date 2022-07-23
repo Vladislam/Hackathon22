@@ -3,16 +3,19 @@ package com.dungeon.software.hackathon.data.repository
 import com.dungeon.software.hackathon.data.models.UserDto
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
+
 
 interface UserDataSource {
 
     suspend fun fetchListUsers(): List<UserDto>
 
-    suspend fun fetchUser(id: String) : UserDto?
+    suspend fun fetchCurrentUser(): UserDto
+
+    suspend fun fetchUser(id: String): UserDto?
 
     suspend fun createUser(user: UserDto)
 
@@ -35,7 +38,21 @@ interface UserDataSource {
                 }
         }
 
-        override suspend fun fetchUser(id: String) : UserDto? = suspendCoroutine { continuation ->
+        override suspend fun fetchCurrentUser(): UserDto = suspendCoroutine { continuation ->
+            firestore.collection(USERS_COLLECTION)
+                .document(FirebaseAuth.getInstance().currentUser?.uid ?: "")
+                .get()
+                .addOnSuccessListener { snapShot ->
+                    snapShot.toObject(UserDto::class.java)?.let {
+                        continuation.resume(it)
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    continuation.resumeWithException(exception)
+                }
+        }
+
+        override suspend fun fetchUser(id: String): UserDto? = suspendCoroutine { continuation ->
             firestore.collection(USERS_COLLECTION)
                 .document(id)
                 .get()
@@ -47,35 +64,60 @@ interface UserDataSource {
                 }
         }
 
-        override suspend fun createUser(user: UserDto) {
+        override suspend fun createUser(user: UserDto) = suspendCoroutine { continuation ->
+            val currentUser = FirebaseAuth.getInstance().currentUser?.uid ?: kotlin.run {
+                continuation.resumeWithException(NullPointerException())
+                return@suspendCoroutine
+            }
             firestore.collection(USERS_COLLECTION)
-                .document(FirebaseAuth.getInstance().currentUser?.uid ?: "")
+                .document(currentUser)
                 .set(user)
-                .await()
+                .addOnSuccessListener {
+                    continuation.resume(Unit)
+                }
+                .addOnFailureListener {
+                    continuation.resumeWithException(it)
+                }
         }
 
-        override suspend fun addToFriends(user: UserDto) {
+        override suspend fun addToFriends(user: UserDto) = suspendCoroutine { continuation ->
             firestore.collection(USERS_COLLECTION)
                 .document()
                 .update("friends", user.friends)
-                .await()
+                .addOnSuccessListener {
+                    continuation.resume(Unit)
+                }
+                .addOnFailureListener {
+                    continuation.resumeWithException(it)
+                }
         }
 
-        override suspend fun changeImage(url: String) {
+        override suspend fun changeImage(url: String) = suspendCoroutine { continuation ->
             firestore.collection(USERS_COLLECTION)
                 .document(FirebaseAuth.getInstance().currentUser?.uid ?: "")
                 .update(
                     mapOf("imageUrl" to url)
                 )
-                .await()
+                .addOnSuccessListener {
+                    continuation.resume(Unit)
+                }
+                .addOnFailureListener {
+                    continuation.resumeWithException(it)
+                }
         }
 
-        override suspend fun changeName(id: String, name: String) {
-            firestore.collection(USERS_COLLECTION)
-                .document(id)
-                .update("name", name)
-                .await()
-        }
+        override suspend fun changeName(id: String, name: String) =
+            suspendCancellableCoroutine { emitter ->
+                firestore.collection(USERS_COLLECTION)
+                    .document(id)
+                    .update("name", name)
+                    .addOnSuccessListener {
+                        emitter.resume(Unit)
+                    }
+                    .addOnFailureListener {
+                        emitter.resumeWithException(it)
+                    }
+            }
 
         companion object {
             private const val USERS_COLLECTION = "users"

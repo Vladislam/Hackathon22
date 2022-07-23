@@ -60,8 +60,8 @@
             android:text="@string/name"
             android:textColor="@color/black"
             android:textSize="18sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ivChatImage" />
+            app:layout_constraintStart_toEndOf="@id/ivChatImage"
+            app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
         <EditText
             android:id="@+id/etName"
@@ -72,9 +72,10 @@
             android:inputType="textCapSentences"
             android:maxLines="1"
             android:hint="@string/name"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@id/ivChatImage"
             app:layout_constraintTop_toBottomOf="@id/tvNameLabel"
             tools:text="Stanley" />
+
 
         <TextView
             android:id="@+id/tvEmailLabel"
@@ -85,25 +86,23 @@
             android:text="@string/email"
             android:textColor="@color/black"
             android:textSize="18sp"
-            app:layout_constraintBottom_toTopOf="@id/etEmail"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@id/ivChatImage"
             app:layout_constraintTop_toBottomOf="@id/etName" />
 
         <TextView
             android:id="@+id/etEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
             android:layout_marginTop="12dp"
             android:textColor="@color/black"
             android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.04"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@id/ivChatImage"
             app:layout_constraintTop_toBottomOf="@id/tvEmailLabel"
             tools:text="text@gmail.com" />
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/btnAuth"
+            android:id="@+id/btn_log_out"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="12dp"
@@ -117,14 +116,13 @@
             app:strokeWidth="1dp">
 
             <TextView
-                android:id="@+id/tvAuth"
                 style="@style/TextAppearance.Material3.TitleMedium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:padding="15dp"
-                android:textColor="@color/white"
-                tools:text="Log in" />
+                android:text="@string/log_out"
+                android:textColor="@color/white" />
 
         </com.google.android.material.card.MaterialCardView>
 
