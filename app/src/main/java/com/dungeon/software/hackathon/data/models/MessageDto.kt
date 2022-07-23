@@ -1,5 +1,6 @@
 package com.dungeon.software.hackathon.data.models
 
+import com.dungeon.software.hackathon.domain.models.Message
 import com.google.firebase.firestore.DocumentId
 
 data class MessageDto(
@@ -12,4 +13,8 @@ data class MessageDto(
     val isSeen: Boolean,
     val userUid: String,
     val timeSeen: Long?
-): MessageDataDto
+) : MessageDataDto {
+
+    constructor(message: Message) : this(message.uid, message.message, message.imageUrl, message.videoUrl, message.timeSent, message.isSeen, message.user.uid, message.timeSeen)
+
+}
