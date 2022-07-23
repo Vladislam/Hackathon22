@@ -1,14 +1,12 @@
 package com.dungeon.software.hackathon.presentation.user_details_screen
 
 import android.net.Uri
-import androidx.lifecycle.viewModelScope
 import com.dungeon.software.hackathon.base.view_model.BaseViewModel
 import com.dungeon.software.hackathon.data.models.UserDto
 import com.dungeon.software.hackathon.domain.repository.AuthRepository
 import com.dungeon.software.hackathon.domain.repository.UserRepository
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.launch
 
 class UserDetailsViewModel(
     private val userRepository: UserRepository,
@@ -25,7 +23,7 @@ class UserDetailsViewModel(
         fetchUser()
     }
 
-    fun updateImageProfile(url: Uri){
+    fun updateImageProfile(url: Uri) {
         launchRequest { userRepository.changeImage(url) }
     }
 
@@ -36,9 +34,7 @@ class UserDetailsViewModel(
         }
     }
 
-    fun fetchUser() {
-        viewModelScope.launch {
-            _currentUser.emit(userRepository.fetchCurrentUser())
-        }
+    private fun fetchUser() = launchRequest {
+        _currentUser.emit(userRepository.fetchCurrentUser())
     }
 }

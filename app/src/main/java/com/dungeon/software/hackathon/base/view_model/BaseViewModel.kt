@@ -11,28 +11,27 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.lang.Exception
 import kotlin.coroutines.CoroutineContext
 
 abstract class BaseViewModel : ViewModel() {
 
     protected val _loadingFlow = MutableStateFlow(false)
-    val loadingFlow : StateFlow<Boolean> = _loadingFlow
+    val loadingFlow: StateFlow<Boolean> = _loadingFlow
 
     protected val _errorMessage = MutableSharedFlow<String>()
-    val errorMessage : SharedFlow<String> = _errorMessage
+    val errorMessage: SharedFlow<String> = _errorMessage
 
     protected fun launchRequest(
         context: CoroutineContext = Dispatchers.IO,
         scope: CoroutineScope = viewModelScope,
-        block : suspend CoroutineScope.() -> Unit
+        block: suspend CoroutineScope.() -> Unit
     ) = scope.launch {
         try {
             _loadingFlow.emit(true)
-            withContext(context){
+            withContext(context) {
                 block.invoke(this)
             }
-        } catch (e: Exception){
+        } catch (e: Exception) {
             CustomError.parse(e)
         } finally {
             _loadingFlow.emit(false)

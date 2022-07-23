@@ -1,14 +1,13 @@
 package com.dungeon.software.hackathon.presentation.user_details_screen
 
+import android.app.Activity.RESULT_OK
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.bumptech.glide.Priority
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.dungeon.software.hackathon.R
 import com.dungeon.software.hackathon.base.fragment.BaseVMFragment
@@ -25,15 +24,29 @@ class UserDetailsFragment : BaseVMFragment<UserDetailsViewModel, FragmentUserDet
     override val viewModelClass: KClass<UserDetailsViewModel>
         get() = UserDetailsViewModel::class
 
+    private val activityResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == RESULT_OK) {
+                it.data?.data?.let { selectedImageUri ->
+                    // Get the path from the Uri
+                    binding.ivChatImage.setImageURI(null)
+                    Glide.with(requireContext())
+                        .load(selectedImageUri)
+                        .transform(CircleCrop())
+                        .placeholder(R.drawable.portrait_placeholder)
+                        .error(R.drawable.portrait_placeholder)
+                        .into(binding.ivChatImage)
+                    viewModel.updateImageProfile(selectedImageUri)
+                }
+            }
+        }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.btnLogOut.setOnClickListener {
             viewModel.logout()
-            (parentFragment as NavHostFragment)
-                .parentFragment
-                ?.findNavController()
-                ?.navigate(R.id.splashFragment)
+            findNavController().navigate(R.id.splashFragment)
         }
 
         binding.fab.setOnClickListener { openImageChooser() }
@@ -42,10 +55,11 @@ class UserDetailsFragment : BaseVMFragment<UserDetailsViewModel, FragmentUserDet
     }
 
     private fun openImageChooser() {
-        val intent = Intent()
-        intent.type = "image/*"
-        intent.action = Intent.ACTION_GET_CONTENT
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), SELECT_PICTURE)
+        Intent(Intent.ACTION_GET_CONTENT).apply {
+            type = "image/*"
+            action = Intent.ACTION_GET_CONTENT
+            activityResult.launch(this)
+        }
     }
 
     private fun initObservers() {
@@ -62,28 +76,5 @@ class UserDetailsFragment : BaseVMFragment<UserDetailsViewModel, FragmentUserDet
                 }
             }
         }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode === SELECT_PICTURE) {
-            // Get the url from data
-            val selectedImageUri: Uri? = data?.data
-            if (null != selectedImageUri) {
-                // Get the path from the Uri
-                binding.ivChatImage.setImageURI(null)
-                Glide.with(requireContext())
-                    .load(selectedImageUri)
-                    .transform(CircleCrop())
-                    .placeholder(R.drawable.portrait_placeholder)
-                    .error(R.drawable.portrait_placeholder)
-                    .into(binding.ivChatImage)
-                viewModel.updateImageProfile(selectedImageUri)
-            }
-        }
-    }
-
-    companion object {
-        private const val SELECT_PICTURE = 666
     }
 }

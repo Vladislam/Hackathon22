@@ -2,7 +2,9 @@ package com.dungeon.software.hackathon.presentation.splash_screen
 
 import android.app.Activity
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -11,6 +13,7 @@ import com.dangeon.software.notes.util.pop_up.PopUpManager
 import com.dungeon.software.hackathon.R
 import com.dungeon.software.hackathon.base.fragment.BaseVMFragment
 import com.dungeon.software.hackathon.databinding.FragmentSplashBinding
+import com.dungeon.software.hackathon.util.ext.hideBottomNav
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import kotlin.reflect.KClass
@@ -33,6 +36,15 @@ class SplashFragment : BaseVMFragment<SplashViewModel, FragmentSplashBinding>() 
                 showError()
             }
         }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        hideBottomNav()
+        return super.onCreateView(inflater, container, savedInstanceState)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
