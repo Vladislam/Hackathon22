@@ -5,7 +5,7 @@ import com.dungeon.software.hackathon.base.recycler_view.BaseRecyclerViewAdapter
 import com.dungeon.software.hackathon.databinding.ItemUserBinding
 import com.dungeon.software.hackathon.domain.models.User
 
-class FriendsAdapter constructor(private val listener: (User) -> Unit) :
+class UserAdapter constructor(private val listener: (User) -> Unit) :
     BaseRecyclerViewAdapter<User, ItemUserBinding>() {
     override val layoutId: Int
         get() = R.layout.item_user

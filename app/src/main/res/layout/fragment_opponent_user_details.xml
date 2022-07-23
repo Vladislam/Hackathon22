@@ -116,6 +116,7 @@
             app:layout_constraintTop_toBottomOf="@id/user_image" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvFriends"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"

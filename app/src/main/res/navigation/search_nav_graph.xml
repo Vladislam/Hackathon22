@@ -34,5 +34,8 @@
         <argument
             android:name="user"
             app:argType="com.dungeon.software.hackathon.domain.models.User" />
+        <action
+            android:id="@+id/action_opponentUserDetailsFragment_self"
+            app:destination="@id/opponentUserDetailsFragment" />
     </fragment>
 </navigation>
