@@ -1,7 +1,10 @@
 package com.dungeon.software.hackathon.data.models
 
+import com.google.firebase.firestore.DocumentId
+
 data class UserDto(
-    val uid: String = "",
+    @DocumentId
+    val uid: String? = null,
     val name: String = "",
     val email: String = "",
     val imageUrl: String? = null,

@@ -8,4 +8,4 @@ data class GroupChat(
     val name: String,
     val opponents: List<User>,
 
-    )
+    ): ChatData
