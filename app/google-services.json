@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "12243085829-opf9serqrp4hsr4lgdpq2s1ni0sl9fis.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dungeon.software.hackathon",
+            "certificate_hash": "53a70a7cd9365a04bf933e9b99dfa66dda61acca"
+          }
+        },
+        {
           "client_id": "12243085829-uf4caqjn7qnev8p2cvmkr4c5lf63sc10.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
