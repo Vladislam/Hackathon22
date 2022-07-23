@@ -27,7 +27,7 @@ interface ChatDataSource {
 
     suspend fun changeGroupName(id: String, name: String)
 
-    fun getChats(): Flow<DataState<ArrayList<ChatDto>>>
+    suspend fun getChats(): ArrayList<ChatDataDto>
 
     fun cancelChatSubscription()
 
@@ -138,7 +138,7 @@ interface ChatDataSource {
         }
 
 
-        override fun getChats() = flow<DataState<ArrayList<ChatDto>>> {
+        override suspend fun getChats() = suspendCoroutine<ArrayList<ChatDataDto>> { emitter ->
             FirebaseAuth.getInstance().currentUser?.also { user ->
                 cancelChatSubscription()
                 chatSubscription = firestore
@@ -148,15 +148,19 @@ interface ChatDataSource {
                     .addSnapshotListener { snapshot, error ->
                         scope.launch {
                             error?.let {
-                                this@flow.emit(DataState.Error(it))
+                                emitter.resumeWithException(it)
                             }
                             snapshot?.let {
-                                this@flow.emit(DataState.Data(it.toObjects(ChatDto::class.java).toCollection(ArrayList())))
+                                try {
+                                    emitter.resume(it.toObjects(ChatDto::class.java).toCollection(ArrayList()))
+                                } catch (e: Throwable) {
+                                    emitter.resume(it.toObjects(GroupChatDto::class.java).toCollection(ArrayList()))
+                                }
                             }
                         }
                     }
             } ?: run {
-                emit(DataState.Error(CustomError.SomethingWentWrong))
+                emitter.resumeWithException(CustomError.SomethingWentWrong)
             }
         }
 
