@@ -21,4 +21,8 @@
     <string name="by_last_message_time">By last message time</string>
     <string name="sort">Sort</string>
     <string name="log_out">Log out</string>
+    <string name="send_file">Send file</string>
+    <string name="enter_message">Enter message…</string>
+    <string name="send">Send</string>
+    <string name="image">Image</string>
 </resources>

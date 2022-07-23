@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -10,7 +10,22 @@
     android:paddingEnd="9dp"
     android:paddingBottom="3dp">
 
+    <ImageView
+        android:id="@+id/ivImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|end"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/image"
+        android:maxWidth="250dp"
+        android:maxHeight="250dp"
+        android:paddingHorizontal="14dp"
+        android:paddingVertical="8dp"
+        android:visibility="gone"
+        tools:src="@drawable/portrait_placeholder" />
+
     <androidx.cardview.widget.CardView
+        android:id="@+id/cvRootMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center|end"
@@ -21,10 +36,8 @@
         <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingStart="14dp"
-            android:paddingTop="8dp"
-            android:paddingEnd="14dp"
-            android:paddingBottom="8dp">
+            android:paddingHorizontal="14dp"
+            android:paddingVertical="8dp">
 
             <com.dungeon.software.hackathon.base.widget.TextViewContainerFlow
                 android:layout_width="wrap_content"
@@ -52,4 +65,4 @@
             </com.dungeon.software.hackathon.base.widget.TextViewContainerFlow>
         </FrameLayout>
     </androidx.cardview.widget.CardView>
-</LinearLayout>
+</FrameLayout>
