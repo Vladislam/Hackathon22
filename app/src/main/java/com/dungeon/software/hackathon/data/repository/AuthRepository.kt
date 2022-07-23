@@ -3,14 +3,11 @@ package com.dungeon.software.hackathon.data.repository
 import android.content.Context
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
-import com.dangeon.software.notes.util.pop_up.CustomError
 import com.dungeon.software.hackathon.R
-import com.dungeon.software.hackathon.base.extensions.toUserDto
 import com.dungeon.software.hackathon.data.models.UserDto
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.tasks.await
@@ -32,20 +29,7 @@ interface AuthRepository {
             return firebaseAuth.currentUser != null && firebaseAuth.currentUser?.isAnonymous == false
         }
 
-        override suspend fun authWithIntent(intent: Intent): UserDto? {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(intent)
-            if (task.isSuccessful) {
-                try {
-                    val account = task.getResult(ApiException::class.java)
-                    return firebaseAuthWithGoogle(account)
-
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    throw CustomError.SomethingWentWrong
-                }
-            }
-            return null
-        }
+        override suspend fun authWithIntent(intent: Intent) = firebaseAuthWithGoogle(GoogleSignIn.getSignedInAccountFromIntent(intent).await())
 
         private suspend fun firebaseAuthWithGoogle(account: GoogleSignInAccount?): UserDto? {
             val credential = GoogleAuthProvider.getCredential(account?.idToken, null)
@@ -61,6 +45,16 @@ interface AuthRepository {
 
             val googleSignInClient = GoogleSignIn.getClient(context, gso)
             param.launch(googleSignInClient.signInIntent)
+        }
+
+        private fun GoogleSignInAccount?.toUserDto() = this?.run {
+            UserDto(
+                uid = this.id ?: "-",
+                name = this.displayName ?: "-",
+                email = this.email ?: "-",
+                imageUrl = this.photoUrl?.toString(),
+                friends = listOf()
+            )
         }
     }
 }
