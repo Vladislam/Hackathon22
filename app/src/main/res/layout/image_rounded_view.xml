@@ -25,8 +25,8 @@
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:contentDescription="@string/user_image"
+            android:scaleType="centerCrop"
             app:loadImage="@{imageUrl}"
-            app:tint="@color/grey_very_dark"
             tools:src="@drawable/ic_people_48" />
 
     </androidx.cardview.widget.CardView>
