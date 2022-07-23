@@ -1,4 +1,4 @@
-package com.dungeon.software.hackathon.base.extensions
+package com.dungeon.software.hackathon.util.ext
 
 import android.view.View
 import android.widget.EditText

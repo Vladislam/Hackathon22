@@ -3,7 +3,7 @@ package com.dungeon.software.hackathon.presentation.chats_list_screen
 import android.view.View
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
-import com.dungeon.software.hackathon.base.extensions.onTextChange
+import com.dungeon.software.hackathon.util.ext.onTextChange
 import com.dungeon.software.hackathon.databinding.FragmentChatsListBinding
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow

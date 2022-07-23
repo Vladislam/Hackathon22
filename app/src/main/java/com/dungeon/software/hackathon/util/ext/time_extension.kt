@@ -1,4 +1,4 @@
-package com.dungeon.software.hackathon.base.extensions
+package com.dungeon.software.hackathon.util.ext
 
 import android.content.Context
 import android.text.format.DateFormat

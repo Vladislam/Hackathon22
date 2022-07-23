@@ -17,7 +17,7 @@ class FilePicker(private val activity: AppCompatActivity) {
 
     suspend fun getImageFile() = PhotoResumer(activity).getImage()
 
-    private class PhotoResumer(activity: AppCompatActivity): Resumer(activity) {
+    private class PhotoResumer(activity: AppCompatActivity) : Resumer(activity) {
 
         suspend fun getImage(): File {
             getImageFile()
@@ -36,11 +36,12 @@ class FilePicker(private val activity: AppCompatActivity) {
             }
         }
 
-        private val takeImageResult = activity.registerForActivityResult(ActivityResultContracts.TakePicture()) { isSuccess ->
-            scope.launch {
-                successPicked.emit(true)
+        private val takeImageResult =
+            activity.registerForActivityResult(ActivityResultContracts.TakePicture()) { _ ->
+                scope.launch {
+                    successPicked.emit(true)
+                }
             }
-        }
         override val fileType = "png"
 
     }
@@ -53,12 +54,14 @@ class FilePicker(private val activity: AppCompatActivity) {
         protected val successPicked = MutableSharedFlow<Boolean>()
         protected val scope = CoroutineScope(Dispatchers.IO)
 
-        protected fun getTmpFile() = File.createTempFile("tmp_image_file", ".${fileType}", activity.cacheDir).apply {
-            createNewFile()
-            deleteOnExit()
-        }
+        protected fun getTmpFile() =
+            File.createTempFile("tmp_image_file", ".${fileType}", activity.cacheDir).apply {
+                createNewFile()
+                deleteOnExit()
+            }
 
-        protected fun File.getUri() = FileProvider.getUriForFile(activity, "${BuildConfig.APPLICATION_ID}.provider", this)
+        protected fun File.getUri() =
+            FileProvider.getUriForFile(activity, "${BuildConfig.APPLICATION_ID}.provider", this)
 
     }
 

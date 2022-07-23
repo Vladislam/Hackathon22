@@ -21,8 +21,8 @@ class SplashViewModel(
     fun authWithIntent(intent: Intent) {
         viewModelScope.launch {
             val user = authDataSource.authWithIntent(intent)
-            userRepository.createUser(user!!)
-            _checkedUser.emit(user != null)
+            userRepository.createUser(user ?: return@launch)
+            _checkedUser.emit(true)
         }
     }
 

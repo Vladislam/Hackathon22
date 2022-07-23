@@ -1,4 +1,4 @@
-package com.dungeon.software.hackathon.base.extensions
+package com.dungeon.software.hackathon.util.ext
 
 import android.app.Activity
 import android.view.View
