@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-
 class ConnectionManager : BroadcastReceiver() {
 
     private val job = Job()
