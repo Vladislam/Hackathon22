@@ -29,6 +29,8 @@ class SplashFragment : BaseVMFragment<SplashViewModel, FragmentSplashBinding>() 
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode == Activity.RESULT_OK) {
                 viewModel.authWithIntent(it.data ?: return@registerForActivityResult)
+            } else {
+                showError()
             }
         }
 
@@ -46,10 +48,15 @@ class SplashFragment : BaseVMFragment<SplashViewModel, FragmentSplashBinding>() 
                 if (isLoggedIn) {
                     findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToChatsListNavGraph())
                 } else {
-                    popUpManager.showError(CustomError.SomethingWentWrong)
-                    viewModel.isLoggedIn(activityResult)
+                    showError()
                 }
             }
         }
     }
+
+    private fun showError(error: CustomError = CustomError.SomethingWentWrong) {
+        popUpManager.showError(error)
+        viewModel.isLoggedIn(activityResult)
+    }
+
 }

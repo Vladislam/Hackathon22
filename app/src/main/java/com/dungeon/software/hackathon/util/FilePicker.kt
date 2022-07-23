@@ -15,14 +15,9 @@ import kotlin.coroutines.suspendCoroutine
 
 class FilePicker(private val activity: AppCompatActivity) {
 
-    suspend fun getImageFile() = Resumer(activity).getImage()
+    suspend fun getImageFile() = ImageResumer(activity).getImage()
 
-    private class Resumer(private val activity: AppCompatActivity) {
-
-        private val scope = CoroutineScope(Dispatchers.IO)
-
-        private var latestFile: File? = null
-        private val successPicked = MutableSharedFlow<Boolean>()
+    private class ImageResumer(activity: AppCompatActivity): Resumer(activity) {
 
         suspend fun getImage(): File {
             getImageFile()
@@ -47,12 +42,20 @@ class FilePicker(private val activity: AppCompatActivity) {
             }
         }
 
-        private fun getTmpFile() = File.createTempFile("tmp_image_file", ".png", activity.cacheDir).apply {
+    }
+
+    private abstract class Resumer(private val activity: AppCompatActivity) {
+
+        protected var latestFile: File? = null
+        protected val successPicked = MutableSharedFlow<Boolean>()
+        protected val scope = CoroutineScope(Dispatchers.IO)
+
+        protected fun getTmpFile() = File.createTempFile("tmp_image_file", ".png", activity.cacheDir).apply {
             createNewFile()
             deleteOnExit()
         }
 
-        private fun File.getUri() = FileProvider.getUriForFile(activity, "${BuildConfig.APPLICATION_ID}.provider", this)
+        protected fun File.getUri() = FileProvider.getUriForFile(activity, "${BuildConfig.APPLICATION_ID}.provider", this)
 
     }
 
