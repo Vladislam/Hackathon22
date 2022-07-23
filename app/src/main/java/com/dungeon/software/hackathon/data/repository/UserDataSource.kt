@@ -29,8 +29,6 @@ interface UserDataSource {
 
     suspend fun changeName(id: String, name: String)
 
-    suspend fun deleteUser()
-
     class Base(private val firestore: FirebaseFirestore) : UserDataSource {
 
         override suspend fun fetchListUsers(): List<UserDto> = suspendCoroutine { continuation ->
@@ -140,18 +138,6 @@ interface UserDataSource {
                         emitter.resumeWithException(it)
                     }
             }
-
-        override suspend fun deleteUser() = suspendCoroutine { continuation ->
-            firestore.collection(USERS_COLLECTION)
-                .document(FirebaseAuth.getInstance().currentUser?.uid ?: "")
-                .delete()
-                .addOnSuccessListener {
-                    continuation.resume(Unit)
-                }
-                .addOnFailureListener {
-                    continuation.resumeWithException(it)
-                }
-        }
 
         override suspend fun createUser(user: UserDto) = suspendCoroutine { continuation ->
             val currentUser = FirebaseAuth.getInstance().currentUser?.uid ?: kotlin.run {

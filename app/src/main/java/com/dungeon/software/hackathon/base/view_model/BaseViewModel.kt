@@ -3,20 +3,16 @@ package com.dungeon.software.hackathon.base.view_model
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dangeon.software.notes.util.pop_up.CustomError
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
 
 abstract class BaseViewModel : ViewModel() {
 
     protected val _loadingFlow = MutableStateFlow(false)
-    val loadingFlow: StateFlow<Boolean> = _loadingFlow
+    val loadingFlow: SharedFlow<Boolean> = _loadingFlow
 
     protected val _errorMessage = MutableSharedFlow<String>()
     val errorMessage: SharedFlow<String> = _errorMessage

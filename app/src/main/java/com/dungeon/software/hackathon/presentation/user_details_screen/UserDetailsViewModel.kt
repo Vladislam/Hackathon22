@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.dungeon.software.hackathon.base.view_model.BaseViewModel
 import com.dungeon.software.hackathon.data.models.UserDto
+import com.dungeon.software.hackathon.domain.models.User
 import com.dungeon.software.hackathon.domain.repository.AuthRepository
 import com.dungeon.software.hackathon.domain.repository.UserRepository
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -15,8 +16,8 @@ class UserDetailsViewModel(
     private val authRepository: AuthRepository
 ) : BaseViewModel() {
 
-    private val _currentUser = MutableSharedFlow<UserDto>()
-    val currentUser: SharedFlow<UserDto> = _currentUser
+    private val _currentUser = MutableSharedFlow<User>()
+    val currentUser: SharedFlow<User> = _currentUser
 
     private val _logout = MutableSharedFlow<Boolean>()
     val logout: SharedFlow<Boolean> = _logout
@@ -32,7 +33,6 @@ class UserDetailsViewModel(
     fun logout() {
         launchRequest {
             authRepository.logout()
-            userRepository.deleteUser()
             _logout.emit(true)
         }
     }

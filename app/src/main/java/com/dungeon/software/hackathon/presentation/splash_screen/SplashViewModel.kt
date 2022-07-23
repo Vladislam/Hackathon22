@@ -3,13 +3,13 @@ package com.dungeon.software.hackathon.presentation.splash_screen
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
 import com.dungeon.software.hackathon.base.view_model.BaseViewModel
-import com.dungeon.software.hackathon.data.repository.AuthDataSource
+import com.dungeon.software.hackathon.domain.repository.AuthRepository
 import com.dungeon.software.hackathon.domain.repository.UserRepository
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 
 class SplashViewModel(
-    private val authDataSource: AuthDataSource,
+    private val authRepository: AuthRepository,
     private val userRepository: UserRepository
 ) : BaseViewModel() {
 
@@ -18,7 +18,7 @@ class SplashViewModel(
 
     fun authWithIntent(intent: Intent) {
         launchRequest {
-            val user = authDataSource.authWithIntent(intent)
+            val user = authRepository.authWithIntent(intent)
             userRepository.createUser(user ?: return@launchRequest)
             _checkedUser.emit(true)
         }
@@ -27,8 +27,8 @@ class SplashViewModel(
     // TODO: fix it
     fun checkUser(intent: Intent) {
         launchRequest {
-            if (authDataSource.checkUser()) {
-                val user = authDataSource.authWithIntent(intent)
+            if (authRepository.checkUser()) {
+                val user = authRepository.authWithIntent(intent)
                 userRepository.createUser(user ?: return@launchRequest)
                 _checkedUser.emit(true)
             } else {
@@ -39,10 +39,10 @@ class SplashViewModel(
 
     fun isLoggedIn(param: ActivityResultLauncher<Intent>) {
         launchRequest {
-            if (authDataSource.isLoggedIn()) {
+            if (authRepository.isLoggedIn()) {
                 _checkedUser.emit(true)
             } else {
-                authDataSource.authWithGoogle(param)
+                authRepository.authWithGoogle(param)
             }
         }
     }
