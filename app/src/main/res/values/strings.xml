@@ -20,4 +20,5 @@
     <string name="by_name">By name</string>
     <string name="by_last_message_time">By last message time</string>
     <string name="sort">Sort</string>
+    <string name="log_out">Log out</string>
 </resources>

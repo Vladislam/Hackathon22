@@ -34,7 +34,6 @@ abstract class BaseViewModel : ViewModel() {
             }
         } catch (e: Exception){
             CustomError.parse(e)
-            _errorMessage.emit(e.localizedMessage)
         } finally {
             _loadingFlow.emit(false)
         }

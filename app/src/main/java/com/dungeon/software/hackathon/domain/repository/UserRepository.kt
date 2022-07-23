@@ -7,6 +7,8 @@ interface UserRepository {
 
     suspend fun fetchListUsers(): List<UserDto>
 
+    suspend fun fetchCurrentUser() : UserDto
+
     suspend fun fetchUser(id: String) : UserDto?
 
     suspend fun createUser(user: UserDto)
@@ -20,6 +22,8 @@ interface UserRepository {
     class Base(private val dataSource: UserDataSource) : UserRepository {
 
         override suspend fun fetchListUsers(): List<UserDto> = dataSource.fetchListUsers()
+
+        override suspend fun fetchCurrentUser(): UserDto = dataSource.fetchCurrentUser()
 
         override suspend fun fetchUser(id: String): UserDto? = dataSource.fetchUser(id)
 
