@@ -3,8 +3,12 @@
 
     <string name="no_internet_connection">Check internet connection!</string>
     <string name="something_went_wrong">Something went wrong</string>
+    <string name="user_details">User Details</string>
     <string name="chats">Chats</string>
     <string name="search_friends">Search friends</string>
     <string name="profile">Profile</string>
     <string name="API_KEY">AIzaSyCFzGJvKWNMUAo5TxgMcnu8lBmeSxSGUxo</string>
+    <string name="name">Name</string>
+    <string name="email">Email</string>
+    <string name="uid">Uid</string>
 </resources>
