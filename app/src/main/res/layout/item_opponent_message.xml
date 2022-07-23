@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="12dp"
+    android:layout_marginTop="6dp"
+    android:layout_marginEnd="9dp"
+    android:layout_marginBottom="3dp"
+    app:cardBackgroundColor="@color/light_gray"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="5dp">
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="14dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="14dp"
+        android:paddingBottom="8dp">
+
+        <com.dungeon.software.hackathon.base.widget.TextViewContainerFlow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/textViewContent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxWidth="250dp"
+                style="@style/Theme.Hackathon22.Text"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                tools:text="kldfjhklgkhldfkljhdfgh jdgjhhjdfjkljk; hghjd;fghdhgkhf dgkhljdfgkhjdfkgj   dfghjdflhjdfklh;hkd            hkdlfjgh;lkdh" />
+
+            <TextView
+                android:id="@+id/tvTimeSent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Theme.Hackathon22.Text.Light"
+                android:paddingStart="12dp"
+                android:textColor="@color/black"
+                tools:ignore="RtlSymmetry"
+                tools:text="14:44" />
+        </com.dungeon.software.hackathon.base.widget.TextViewContainerFlow>
+    </FrameLayout>
+</androidx.cardview.widget.CardView>
