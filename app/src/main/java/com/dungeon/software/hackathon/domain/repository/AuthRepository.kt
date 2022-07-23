@@ -2,7 +2,7 @@ package com.dungeon.software.hackathon.domain.repository
 
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
-import com.dungeon.software.hackathon.data.repository.AuthDataSource
+import com.dungeon.software.hackathon.data.data_source.AuthDataSource
 import com.dungeon.software.hackathon.domain.models.User
 
 interface AuthRepository {

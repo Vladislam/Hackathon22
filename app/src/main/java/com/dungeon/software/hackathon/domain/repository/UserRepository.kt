@@ -2,7 +2,7 @@ package com.dungeon.software.hackathon.domain.repository
 
 import android.net.Uri
 import com.dungeon.software.hackathon.data.models.UserDto
-import com.dungeon.software.hackathon.data.repository.UserDataSource
+import com.dungeon.software.hackathon.data.data_source.UserDataSource
 import com.dungeon.software.hackathon.domain.models.User
 
 interface UserRepository {

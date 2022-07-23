@@ -3,7 +3,7 @@ package com.dungeon.software.hackathon.domain.repository
 import com.dungeon.software.hackathon.data.data_source.ChatDataSource
 import com.dungeon.software.hackathon.data.data_source.MessageDataSource
 import com.dungeon.software.hackathon.data.models.*
-import com.dungeon.software.hackathon.data.repository.UserDataSource
+import com.dungeon.software.hackathon.data.data_source.UserDataSource
 import com.dungeon.software.hackathon.domain.models.*
 import com.dungeon.software.hackathon.util.DataState
 import kotlinx.coroutines.CoroutineScope
