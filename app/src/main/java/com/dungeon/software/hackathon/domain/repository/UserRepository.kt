@@ -1,6 +1,7 @@
 package com.dungeon.software.hackathon.domain.repository
 
 import android.net.Uri
+import com.dungeon.software.hackathon.data.data_source.StorageDataSource
 import com.dungeon.software.hackathon.data.models.UserDto
 import com.dungeon.software.hackathon.data.data_source.UserDataSource
 import com.dungeon.software.hackathon.domain.models.User
@@ -17,26 +18,28 @@ interface UserRepository {
 
     suspend fun addToFriends(user: User)
 
-    suspend fun changeImage(url: Uri): String
+    suspend fun changeImage(url: Uri)
 
     suspend fun changeName(id: String, name: String)
 
-    class Base(private val dataSource: UserDataSource) : UserRepository {
+    class Base(private val userDataSource: UserDataSource, private val storageDataSource: StorageDataSource) : UserRepository {
 
         override suspend fun fetchListUsers(): List<User> =
-            dataSource.fetchListUsers().map { User(it) }
+            userDataSource.fetchListUsers().map { User(it) }
 
-        override suspend fun fetchCurrentUser(): User = User(dataSource.fetchCurrentUser())
+        override suspend fun fetchCurrentUser(): User = User(userDataSource.fetchCurrentUser())
 
         override suspend fun fetchUser(id: String): User? =
-            dataSource.fetchUser(id)?.let { User(it) }
+            userDataSource.fetchUser(id)?.let { User(it) }
 
-        override suspend fun createUser(user: User) = dataSource.createUser(UserDto(user))
+        override suspend fun createUser(user: User) = userDataSource.createUser(UserDto(user))
 
-        override suspend fun addToFriends(user: User) = dataSource.addToFriends(UserDto(user))
+        override suspend fun addToFriends(user: User) = userDataSource.addToFriends(UserDto(user))
 
-        override suspend fun changeImage(url: Uri): String = dataSource.changeImage(url)
+        override suspend fun changeImage(url: Uri) {
+            userDataSource.changeImage(storageDataSource.saveFile(url))
+        }
 
-        override suspend fun changeName(id: String, name: String) = dataSource.changeName(id, name)
+        override suspend fun changeName(id: String, name: String) = userDataSource.changeName(id, name)
     }
 }

@@ -1,5 +1,6 @@
 package com.dungeon.software.hackathon.data.data_source
 
+import android.net.Uri
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
@@ -37,5 +38,28 @@ class StorageDataSource {
                     }
             }
     }
+
+    suspend fun saveFile(uri: Uri) = suspendCoroutine { emitter ->
+        val user = Firebase.auth.currentUser ?: run {
+            emitter.resumeWithException(IllegalArgumentException())
+            return@suspendCoroutine
+        }
+
+        val ref = storageRef.child("user${user.uid}/file/${uri.path}/${UUID.randomUUID()}")
+        ref.putFile(uri)
+            .addOnFailureListener {
+                emitter.resumeWithException(it)
+            }
+            .addOnSuccessListener {
+                ref.downloadUrl
+                    .addOnSuccessListener {
+                        emitter.resume(it.toString())
+                    }
+                    .addOnFailureListener {
+                        emitter.resumeWithException(it)
+                    }
+            }
+    }
+
 
 }
