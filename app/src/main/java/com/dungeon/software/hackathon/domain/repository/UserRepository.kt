@@ -20,6 +20,8 @@ interface UserRepository {
 
     suspend fun changeName(id: String, name: String)
 
+    suspend fun deleteUser()
+
     class Base(private val dataSource: UserDataSource) : UserRepository {
 
         override suspend fun fetchListUsers(): List<UserDto> = dataSource.fetchListUsers()
@@ -36,5 +38,6 @@ interface UserRepository {
 
         override suspend fun changeName(id: String, name: String) = dataSource.changeName(id, name)
 
+        override suspend fun deleteUser() = dataSource.deleteUser()
     }
 }
