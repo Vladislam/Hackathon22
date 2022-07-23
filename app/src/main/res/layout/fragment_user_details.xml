@@ -29,7 +29,7 @@
         </androidx.cardview.widget.CardView>
 
         <ImageView
-            android:id="@+id/ivUserImage"
+            android:id="@+id/ivChatImage"
             android:layout_width="128dp"
             android:layout_height="128dp"
             android:layout_margin="12dp"
@@ -45,8 +45,8 @@
             android:layout_gravity="bottom|end"
             android:contentDescription="@null"
             app:fabCustomSize="30dp"
-            app:layout_constraintBottom_toBottomOf="@id/ivUserImage"
-            app:layout_constraintEnd_toEndOf="@id/ivUserImage"
+            app:layout_constraintBottom_toBottomOf="@id/ivChatImage"
+            app:layout_constraintEnd_toEndOf="@id/ivChatImage"
             app:maxImageSize="20dp"
             app:srcCompat="@drawable/ic_add_photo_24"
             app:tint="@color/white" />
@@ -61,7 +61,7 @@
             android:textColor="@color/black"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ivUserImage" />
+            app:layout_constraintTop_toBottomOf="@id/ivChatImage" />
 
         <EditText
             android:id="@+id/etName"
