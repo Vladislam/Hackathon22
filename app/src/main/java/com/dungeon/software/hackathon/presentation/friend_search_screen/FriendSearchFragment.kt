@@ -15,7 +15,7 @@ class FriendSearchFragment : BaseVMFragment<FriendSearchViewModel, FragmentFrien
     override val viewModelClass: KClass<FriendSearchViewModel>
         get() = FriendSearchViewModel::class
 
-    private val adapter = UserAdapter {
+    private val adapter = FriendsSearchAdapter {
         findNavController().navigate(
             FriendSearchFragmentDirections.actionFriendSearchFragmentToOpponentUserDetailsFragment(
                 it

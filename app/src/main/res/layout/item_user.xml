@@ -16,6 +16,7 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         android:padding="12dp"
+        android:background="@drawable/transition_selection"
         android:focusable="true">
 
         <include

@@ -1,4 +1,4 @@
-package com.dungeon.software.hackathon.presentation.friend_search_screen
+package com.dungeon.software.hackathon.presentation.opponent_user_details_screen
 
 import com.dungeon.software.hackathon.R
 import com.dungeon.software.hackathon.base.recycler_view.BaseRecyclerViewAdapter
