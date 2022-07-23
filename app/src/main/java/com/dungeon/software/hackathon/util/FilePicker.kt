@@ -15,9 +15,9 @@ import kotlin.coroutines.suspendCoroutine
 
 class FilePicker(private val activity: AppCompatActivity) {
 
-    suspend fun getImageFile() = ImageResumer(activity).getImage()
+    suspend fun getImageFile() = PhotoResumer(activity).getImage()
 
-    private class ImageResumer(activity: AppCompatActivity): Resumer(activity) {
+    private class PhotoResumer(activity: AppCompatActivity): Resumer(activity) {
 
         suspend fun getImage(): File {
             getImageFile()
