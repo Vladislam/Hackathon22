@@ -7,6 +7,6 @@ import org.koin.dsl.module
 
 val repositoriesModule = module {
     single<AuthRepository> { AuthRepository.Base(get()) }
-    single<UserRepository> { UserRepository.Base(get()) }
+    single<UserRepository> { UserRepository.Base(get(), get()) }
     single<ChatRepository> { ChatRepository.Base(get(), get(), get()) }
 }
