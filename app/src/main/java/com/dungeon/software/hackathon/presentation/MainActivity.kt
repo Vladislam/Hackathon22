@@ -4,9 +4,7 @@ import android.os.Bundle
 import com.dungeon.software.hackathon.R
 import com.dungeon.software.hackathon.base.activity.BaseBindingActivity
 import com.dungeon.software.hackathon.databinding.ActivityMainBinding
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 class MainActivity : BaseBindingActivity<ActivityMainBinding>() {
 
     override val layoutId: Int
