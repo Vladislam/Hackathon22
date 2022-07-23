@@ -5,6 +5,9 @@
 
     <data>
 
+        <variable
+            name="imageUrl"
+            type="String" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -22,6 +25,7 @@
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:contentDescription="@string/user_image"
+            app:loadImage="@{imageUrl}"
             app:tint="@color/grey_very_dark"
             tools:src="@drawable/ic_people_48" />
 
