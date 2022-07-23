@@ -6,25 +6,9 @@
     android:layout_height="wrap_content"
     android:padding="12dp">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cvChatImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:cardCornerRadius="60dp"
-        app:cardBackgroundColor="@color/grey_very_light"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/ivChatImage"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:contentDescription="@string/user_image"
-            tools:src="@drawable/ic_people_48"
-            app:tint="@color/grey_very_dark" />
-
-    </androidx.cardview.widget.CardView>
+    <include
+        android:id="@+id/include_image"
+        layout="@layout/image_rounded_view" />
 
     <TextView
         android:id="@+id/tvChatName"
@@ -34,7 +18,7 @@
         android:layout_marginStart="12dp"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@id/tvLastMessage"
-        app:layout_constraintStart_toEndOf="@id/cvChatImage"
+        app:layout_constraintStart_toEndOf="@id/include_image"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Stanley" />
 
@@ -46,7 +30,7 @@
         android:layout_marginStart="12dp"
         android:layout_marginTop="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/cvChatImage"
+        app:layout_constraintStart_toEndOf="@id/include_image"
         app:layout_constraintTop_toBottomOf="@id/tvChatName"
         tools:text="text@gmail.com" />
 
