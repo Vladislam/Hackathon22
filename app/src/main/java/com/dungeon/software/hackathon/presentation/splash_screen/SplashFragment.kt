@@ -6,13 +6,18 @@ import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.dangeon.software.notes.util.pop_up.CustomError
+import com.dangeon.software.notes.util.pop_up.PopUpManager
 import com.dungeon.software.hackathon.R
 import com.dungeon.software.hackathon.base.fragment.BaseVMFragment
 import com.dungeon.software.hackathon.databinding.FragmentSplashBinding
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 import kotlin.reflect.KClass
 
 class SplashFragment : BaseVMFragment<SplashViewModel, FragmentSplashBinding>() {
+
+    private val popUpManager: PopUpManager by inject()
 
     override val layoutId: Int
         get() = R.layout.fragment_splash
@@ -31,7 +36,7 @@ class SplashFragment : BaseVMFragment<SplashViewModel, FragmentSplashBinding>() 
         super.onViewCreated(view, savedInstanceState)
 
         initObservers()
-
+        popUpManager.attach(binding.rootContainer, lifecycle)
         viewModel.isLoggedIn(activityResult)
     }
 
@@ -41,7 +46,8 @@ class SplashFragment : BaseVMFragment<SplashViewModel, FragmentSplashBinding>() 
                 if (isLoggedIn) {
                     findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToChatsListNavGraph())
                 } else {
-                    // TODO: Show Error
+                    popUpManager.showError(CustomError.SomethingWentWrong)
+                    viewModel.isLoggedIn(activityResult)
                 }
             }
         }

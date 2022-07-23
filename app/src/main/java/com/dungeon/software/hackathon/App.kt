@@ -1,6 +1,7 @@
 package com.dungeon.software.hackathon
 
 import android.app.Application
+import com.dungeon.software.hackathon.di.managerModule
 import com.dungeon.software.hackathon.di.modelModule
 import com.dungeon.software.hackathon.di.repositoriesModule
 import com.dungeon.software.hackathon.di.viewModelModule
@@ -22,7 +23,8 @@ class App : Application() {
             modules(listOf(
                 viewModelModule,
                 modelModule,
-                repositoriesModule
+                repositoriesModule,
+                managerModule
             ))
         }
     }
