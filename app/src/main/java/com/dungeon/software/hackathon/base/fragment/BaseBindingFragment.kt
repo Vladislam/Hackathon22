@@ -11,6 +11,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import com.dungeon.software.hackathon.presentation.MainActivity
+import com.google.android.material.snackbar.Snackbar
 
 abstract class BaseBindingFragment<Binding : ViewDataBinding> : Fragment() {
 
@@ -34,12 +35,12 @@ abstract class BaseBindingFragment<Binding : ViewDataBinding> : Fragment() {
         return binding.root
     }
 
-    protected fun showMessage(message: String, duration: Int = Toast.LENGTH_SHORT) {
-        Toast.makeText(requireContext(), message, duration).show()
+    protected fun showMessage(message: String, duration: Int = Snackbar.LENGTH_SHORT) {
+        Snackbar.make(requireView(), message, duration).show()
     }
 
-    protected fun showMessage(@StringRes message: Int, duration: Int = Toast.LENGTH_SHORT) {
-        Toast.makeText(requireContext(), message, duration).show()
+    protected fun showMessage(@StringRes message: Int, duration: Int = Snackbar.LENGTH_SHORT) {
+        Snackbar.make(requireView(), message, duration).show()
     }
 
     override fun onDestroyView() {
