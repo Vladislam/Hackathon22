@@ -41,16 +41,19 @@ class FilePicker(private val activity: AppCompatActivity) {
                 successPicked.emit(true)
             }
         }
+        override val fileType = "png"
 
     }
 
     private abstract class Resumer(private val activity: AppCompatActivity) {
 
+        abstract val fileType: String
+
         protected var latestFile: File? = null
         protected val successPicked = MutableSharedFlow<Boolean>()
         protected val scope = CoroutineScope(Dispatchers.IO)
 
-        protected fun getTmpFile() = File.createTempFile("tmp_image_file", ".png", activity.cacheDir).apply {
+        protected fun getTmpFile() = File.createTempFile("tmp_image_file", ".${fileType}", activity.cacheDir).apply {
             createNewFile()
             deleteOnExit()
         }
