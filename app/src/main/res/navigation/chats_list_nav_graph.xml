@@ -41,7 +41,7 @@
     </fragment>
     <fragment
         android:id="@+id/opponentUserDetailsScreen"
-        android:name="com.dungeon.software.hackathon.presentation.opponent_user_details_screen.OpponentUserDetailsScreen"
+        android:name="com.dungeon.software.hackathon.presentation.opponent_user_details_screen.OpponentUserDetailsFragment"
         android:label="OpponentUserDetailsScreen" />
     <fragment
         android:id="@+id/userDetailsFragment"
