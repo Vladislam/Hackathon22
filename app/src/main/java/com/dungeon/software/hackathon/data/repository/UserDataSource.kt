@@ -21,13 +21,15 @@ interface UserDataSource {
 
     suspend fun fetchUser(id: String): UserDto?
 
-    suspend fun createUser(user: UserDto)
-
     suspend fun addToFriends(user: UserDto)
 
     suspend fun changeImage(url: Uri): String
 
+    suspend fun createUser(user: UserDto)
+
     suspend fun changeName(id: String, name: String)
+
+    suspend fun deleteUser()
 
     class Base(private val firestore: FirebaseFirestore) : UserDataSource {
 
@@ -68,21 +70,6 @@ interface UserDataSource {
                 }
         }
 
-        override suspend fun createUser(user: UserDto) = suspendCoroutine { continuation ->
-            val currentUser = FirebaseAuth.getInstance().currentUser?.uid ?: kotlin.run {
-                continuation.resumeWithException(NullPointerException())
-                return@suspendCoroutine
-            }
-            firestore.collection(USERS_COLLECTION)
-                .document(currentUser)
-                .set(user)
-                .addOnSuccessListener {
-                    continuation.resume(Unit)
-                }
-                .addOnFailureListener {
-                    continuation.resumeWithException(it)
-                }
-        }
 
         override suspend fun addToFriends(user: UserDto) = suspendCoroutine { continuation ->
             firestore.collection(USERS_COLLECTION)
@@ -154,8 +141,36 @@ interface UserDataSource {
                     }
             }
 
-        companion object {
-            private const val USERS_COLLECTION = "users"
+        override suspend fun deleteUser() = suspendCoroutine { continuation ->
+            firestore.collection(USERS_COLLECTION)
+                .document(FirebaseAuth.getInstance().currentUser?.uid ?: "")
+                .delete()
+                .addOnSuccessListener {
+                    continuation.resume(Unit)
+                }
+                .addOnFailureListener {
+                    continuation.resumeWithException(it)
+                }
         }
+
+        override suspend fun createUser(user: UserDto) = suspendCoroutine { continuation ->
+            val currentUser = FirebaseAuth.getInstance().currentUser?.uid ?: kotlin.run {
+                continuation.resumeWithException(NullPointerException())
+                return@suspendCoroutine
+            }
+            firestore.collection(USERS_COLLECTION)
+                .document(currentUser)
+                .set(user)
+                .addOnSuccessListener {
+                    continuation.resume(Unit)
+                }
+                .addOnFailureListener {
+                    continuation.resumeWithException(it)
+                }
+        }
+    }
+
+    companion object {
+        const val USERS_COLLECTION = "users"
     }
 }

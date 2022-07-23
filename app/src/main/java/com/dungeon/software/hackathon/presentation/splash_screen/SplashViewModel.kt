@@ -2,13 +2,11 @@ package com.dungeon.software.hackathon.presentation.splash_screen
 
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
-import androidx.lifecycle.viewModelScope
 import com.dungeon.software.hackathon.base.view_model.BaseViewModel
 import com.dungeon.software.hackathon.data.repository.AuthDataSource
 import com.dungeon.software.hackathon.domain.repository.UserRepository
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.launch
 
 class SplashViewModel(
     private val authDataSource: AuthDataSource,
@@ -19,15 +17,28 @@ class SplashViewModel(
     val checkedUser: SharedFlow<Boolean> = _checkedUser
 
     fun authWithIntent(intent: Intent) {
-        viewModelScope.launch {
+        launchRequest {
             val user = authDataSource.authWithIntent(intent)
-            userRepository.createUser(user ?: return@launch)
+            userRepository.createUser(user ?: return@launchRequest)
             _checkedUser.emit(true)
         }
     }
 
+    // TODO: fix it
+    fun checkUser(intent: Intent) {
+        launchRequest {
+            if (authDataSource.checkUser()) {
+                val user = authDataSource.authWithIntent(intent)
+                userRepository.createUser(user ?: return@launchRequest)
+                _checkedUser.emit(true)
+            } else {
+                userRepository.fetchCurrentUser()
+            }
+        }
+    }
+
     fun isLoggedIn(param: ActivityResultLauncher<Intent>) {
-        viewModelScope.launch {
+        launchRequest {
             if (authDataSource.isLoggedIn()) {
                 _checkedUser.emit(true)
             } else {

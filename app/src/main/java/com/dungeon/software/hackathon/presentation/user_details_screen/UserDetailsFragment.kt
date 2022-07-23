@@ -7,6 +7,7 @@ import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.dungeon.software.hackathon.R
@@ -41,6 +42,10 @@ class UserDetailsFragment : BaseVMFragment<UserDetailsViewModel, FragmentUserDet
             }
         }
 
+    private val circularProgressDrawable by lazy {
+        CircularProgressDrawable(requireContext())
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -63,6 +68,11 @@ class UserDetailsFragment : BaseVMFragment<UserDetailsViewModel, FragmentUserDet
     }
 
     private fun initObservers() {
+
+        circularProgressDrawable.strokeWidth = 5f
+        circularProgressDrawable.centerRadius = 30f
+        circularProgressDrawable.start()
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.currentUser.collect { user ->
                 binding.apply {
@@ -72,6 +82,7 @@ class UserDetailsFragment : BaseVMFragment<UserDetailsViewModel, FragmentUserDet
                         .load(user.imageUrl)
                         .error(R.drawable.portrait_placeholder)
                         .transform(CircleCrop())
+                        .placeholder(circularProgressDrawable)
                         .into(ivChatImage)
                 }
             }
