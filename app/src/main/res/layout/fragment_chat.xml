@@ -65,7 +65,7 @@
             android:layout_height="wrap_content">
 
             <ImageButton
-                android:id="@+id/buttonGallery"
+                android:id="@+id/btnSendFile"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_gravity="center_vertical"
@@ -75,15 +75,11 @@
                 android:cropToPadding="true"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_add_circle_24"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintRight_toLeftOf="@id/editTextEnterText"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/editTextEnterText"
                 app:tint="@color/grey_very_dark"
                 tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
             <EditText
-                android:id="@+id/editTextEnterText"
+                android:id="@+id/etEnterMessage"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -99,10 +95,10 @@
                 android:paddingBottom="10dp"
                 android:textColor="?attr/colorOnSecondary"
                 android:textSize="16sp"
-                tools:ignore="NotSibling,SpeakableTextPresentCheck,TouchTargetSizeCheck,UnknownId" />
+                tools:ignore="NotSibling,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
             <ImageButton
-                android:id="@+id/buttonSend"
+                android:id="@+id/btnSend"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center_vertical"
@@ -111,10 +107,6 @@
                 android:contentDescription="@string/send"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_send_24"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toRightOf="@id/editTextEnterText"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="@id/editTextEnterText"
                 app:tint="@color/grey_very_dark"
                 tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
         </LinearLayout>
