@@ -6,4 +6,4 @@ data class GroupChatDto(
     val name: String,
     val opponents: List<String>,
     val imageUrl: String?
-)
+): ChatDataDto
