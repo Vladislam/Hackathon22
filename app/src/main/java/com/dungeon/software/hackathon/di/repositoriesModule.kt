@@ -1,7 +1,7 @@
 package com.dungeon.software.hackathon.di
 
 import com.dungeon.software.hackathon.data.repository.AuthDataSource
-import com.dungeon.software.hackathon.data.repository.ChatRepository
+import com.dungeon.software.hackathon.domain.repository.ChatRepository
 import com.dungeon.software.hackathon.data.repository.UserDataSource
 import com.dungeon.software.hackathon.domain.repository.AuthRepository
 import com.dungeon.software.hackathon.domain.repository.UserRepository

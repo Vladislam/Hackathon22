@@ -1,4 +1,4 @@
-package com.dungeon.software.hackathon.data.repository
+package com.dungeon.software.hackathon.domain.repository
 
 import com.dungeon.software.hackathon.data.data_source.ChatDataSource
 import com.dungeon.software.hackathon.data.data_source.MessageDataSource
@@ -6,6 +6,7 @@ import com.dungeon.software.hackathon.data.models.ChatDto
 import com.dungeon.software.hackathon.data.models.GroupChatDto
 import com.dungeon.software.hackathon.data.models.MessageDto
 import com.dungeon.software.hackathon.data.models.MessageGroupDto
+import com.dungeon.software.hackathon.data.repository.UserDataSource
 import com.dungeon.software.hackathon.domain.models.*
 import com.dungeon.software.hackathon.util.DataState
 import kotlinx.coroutines.CoroutineScope
@@ -13,7 +14,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
 
 interface ChatRepository {
