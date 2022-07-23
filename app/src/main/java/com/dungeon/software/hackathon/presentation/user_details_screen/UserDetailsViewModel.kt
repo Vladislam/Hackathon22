@@ -1,5 +1,6 @@
 package com.dungeon.software.hackathon.presentation.user_details_screen
 
+import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.dungeon.software.hackathon.base.view_model.BaseViewModel
 import com.dungeon.software.hackathon.data.models.UserDto
@@ -24,6 +25,10 @@ class UserDetailsViewModel(
         fetchUser()
     }
 
+    fun updateImageProfile(url: Uri){
+        launchRequest { userRepository.changeImage(url) }
+    }
+
     fun logout() {
         launchRequest {
             authRepository.logout()
@@ -31,7 +36,7 @@ class UserDetailsViewModel(
         }
     }
 
-    private fun fetchUser() {
+    fun fetchUser() {
         viewModelScope.launch {
             _currentUser.emit(userRepository.fetchCurrentUser())
         }
