@@ -30,7 +30,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|start"
             android:layout_margin="8dp"
-            android:visibility="@{message.isMine ? View.VISIBLE : View.GONE}" />
+            android:visibility="@{message.isMine ? View.VISIBLE : View.GONE}"
+            app:imageUrl="@{message.sender.imageUrl}" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cvRootMessage"
@@ -59,9 +60,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:maxWidth="250dp"
+                        android:text="@{message.messageText}"
                         android:textColor="@{message.isMine ? @color/white : @color/black}"
                         android:textSize="16sp"
-                        android:text="@{message.messageText}"
                         tools:text="kldfjhklgkhldfkljhdfgh jdgjhhjdfjkljk; hghjd;fghdhgkhf dgkhljdfgkhjdfkgj   dfghjdflhjdfklh;hkd            hkdlfjgh;lkdh" />
 
                     <TextView
@@ -71,6 +72,7 @@
                         android:layout_height="wrap_content"
                         android:paddingStart="12dp"
                         android:textColor="@{message.isMine ? @color/white : @color/black}"
+                        app:setDate="@{message.messageTimeSent}"
                         tools:ignore="RtlSymmetry"
                         tools:text="14:44" />
                 </com.dungeon.software.hackathon.base.widget.TextViewContainerFlow>
