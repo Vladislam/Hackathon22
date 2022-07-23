@@ -5,7 +5,6 @@ import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
 import com.dungeon.software.hackathon.R
 import com.dungeon.software.hackathon.data.models.UserDto
-import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -13,7 +12,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.tasks.await
 
-interface AuthRepository {
+interface AuthDataSource {
 
     suspend fun isLoggedIn(): Boolean
 
@@ -21,10 +20,12 @@ interface AuthRepository {
 
     suspend fun authWithGoogle(param: ActivityResultLauncher<Intent>)
 
+    suspend fun logout()
+
     class Base(
         private val firebaseAuth: FirebaseAuth,
         private val context: Context
-    ) : AuthRepository {
+    ) : AuthDataSource {
 
         override suspend fun isLoggedIn(): Boolean {
             return firebaseAuth.currentUser != null && firebaseAuth.currentUser?.isAnonymous == false
@@ -57,5 +58,8 @@ interface AuthRepository {
                 friends = listOf()
             )
         }
+
+        override suspend fun logout() = firebaseAuth.signOut()
+
     }
 }

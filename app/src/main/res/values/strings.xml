@@ -15,4 +15,9 @@
     <string name="uid">Uid</string>
     <string name="user_details">User Details</string>
     <string name="user_image">User image</string>
+    <string name="no_chats">No chats</string>
+    <string name="sort_arrow">Sort arrow</string>
+    <string name="by_name">By name</string>
+    <string name="by_last_message_time">By last message time</string>
+    <string name="sort">Sort</string>
 </resources>
