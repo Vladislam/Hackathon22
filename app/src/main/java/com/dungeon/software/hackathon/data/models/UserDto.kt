@@ -1,6 +1,6 @@
 package com.dungeon.software.hackathon.data.models
 
-data class User(
+data class UserDto(
     val uid: String,
     val name: String,
     val email: String,

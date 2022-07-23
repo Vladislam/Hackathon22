@@ -1,12 +1,12 @@
 package com.dungeon.software.hackathon.data.models
 
-data class Message(
+data class MessageGroupDto(
     val uid: String,
-    val message: String?,
+    val message: List<String>,
     val imageUrl: String?,
     val videoUrl: String?,
     val timeSent: Long,
-    val isSeen: Boolean,
+    val seen: List<String>,
     val userUid: String,
-    val timeSeen: Long?
+    val timeSeen: List<Long>
 )

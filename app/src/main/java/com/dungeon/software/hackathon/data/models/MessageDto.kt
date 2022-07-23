@@ -1,12 +1,12 @@
-package com.dungeon.software.hackathon.domain.models
+package com.dungeon.software.hackathon.data.models
 
-data class MessageModel(
+data class MessageDto(
     val uid: String,
     val message: String?,
     val imageUrl: String?,
     val videoUrl: String?,
     val timeSent: Long,
     val isSeen: Boolean,
-    val user: UserModel,
+    val userUid: String,
     val timeSeen: Long?
 )

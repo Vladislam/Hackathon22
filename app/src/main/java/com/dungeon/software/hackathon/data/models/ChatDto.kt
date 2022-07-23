@@ -1,7 +1,7 @@
 package com.dungeon.software.hackathon.data.models
 
-data class Chat(
-    val message: List<Message>,
+data class ChatDto(
+    val message: List<MessageDto>,
     val uid: String,
     val opponent: String
 )
