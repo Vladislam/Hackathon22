@@ -31,12 +31,14 @@ interface ChatDataSource {
 
     fun cancelChatSubscription()
 
+    companion object {
+        val collectionChat = "chat"
+        val collection = "collection"
+    }
+
     class Base : ChatDataSource {
 
         private val firestore = FirebaseFirestore.getInstance()
-
-        private val collectionChat = "chat"
-        private val collection = "collection"
 
         private val scope = CoroutineScope(Dispatchers.IO)
 

@@ -1,7 +1,10 @@
 package com.dungeon.software.hackathon.data.models
 
+import com.google.firebase.firestore.DocumentId
+
 data class MessageGroupDto(
-    val uid: String,
+    @DocumentId
+    val uid: String?,
     val message: List<String>,
     val imageUrl: String?,
     val videoUrl: String?,
@@ -9,4 +12,4 @@ data class MessageGroupDto(
     val seen: List<String>,
     val userUid: String,
     val timeSeen: List<Long>
-)
+): MessageDataDto
