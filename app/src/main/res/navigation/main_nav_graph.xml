@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/splash_nav_graph"
+    app:startDestination="@id/splashFragment">
+
+    <include app:graph="@navigation/chats_list_nav_graph" />
+    <include app:graph="@navigation/search_nav_graph" />
+    <include app:graph="@navigation/profile_nav_graph" />
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.dungeon.software.hackathon.presentation.splash_screen.SplashFragment"
+        android:label="SplashFragment">
+        <action
+            android:id="@+id/action_splashFragment_to_chats_list_nav_graph"
+            app:destination="@id/chats_list_nav_graph"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true"
+            app:launchSingleTop="true" />
+    </fragment>
+
+</navigation>

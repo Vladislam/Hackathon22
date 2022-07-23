@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/search_nav_graph"
+    app:startDestination="@id/friendSearchFragment">
+
+    <fragment
+        android:id="@+id/friendSearchFragment"
+        android:name="com.dungeon.software.hackathon.presentation.friend_search_screen.FriendSearchFragment"
+        android:label="FriendSearchFragment" >
+        <action
+            android:id="@+id/action_friendSearchFragment_to_userDetailsFragment2"
+            app:destination="@id/userDetailsFragment2" />
+        <action
+            android:id="@+id/action_friendSearchFragment_to_groupChatFragment2"
+            app:destination="@id/groupChatFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/userDetailsFragment2"
+        android:name="com.dungeon.software.hackathon.presentation.user_details_screen.UserDetailsFragment"
+        android:label="UserDetailsFragment" />
+    <fragment
+        android:id="@+id/groupChatFragment2"
+        android:name="com.dungeon.software.hackathon.presentation.group_chat_screen.GroupChatFragment"
+        android:label="GroupChatFragment" >
+        <action
+            android:id="@+id/action_groupChatFragment2_to_groupChatDetailsFragment3"
+            app:destination="@id/groupChatDetailsFragment3" />
+    </fragment>
+    <fragment
+        android:id="@+id/groupChatDetailsFragment3"
+        android:name="com.dungeon.software.hackathon.presentation.group_chat_details_screen.GroupChatDetailsFragment"
+        android:label="GroupChatDetailsFragment" />
+</navigation>

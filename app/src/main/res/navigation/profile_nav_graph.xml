@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/user_detail_nav_graph"
+    app:startDestination="@id/userDetailsFragment3">
+
+    <fragment
+        android:id="@+id/userDetailsFragment3"
+        android:name="com.dungeon.software.hackathon.presentation.user_details_screen.UserDetailsFragment"
+        android:label="UserDetailsFragment" />
+</navigation>

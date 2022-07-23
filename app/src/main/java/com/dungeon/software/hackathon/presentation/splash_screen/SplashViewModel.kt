@@ -18,17 +18,17 @@ class SplashViewModel(
 
     fun authWithIntent(intent: Intent) {
         viewModelScope.launch {
-            repository.authWithIntent(intent)
+            val user = repository.authWithIntent(intent)
+            _checkedUser.emit(user != null)
         }
     }
 
     fun isLoggedIn(param: ActivityResultLauncher<Intent>) {
         viewModelScope.launch {
             if (repository.isLoggedIn()) {
-                repository.authWithGoogle(param)
                 _checkedUser.emit(true)
             } else {
-                _checkedUser.emit(false)
+                repository.authWithGoogle(param)
             }
         }
     }

@@ -9,7 +9,7 @@ fun GoogleSignInAccount?.toUserDto() = this?.run {
         uid = this.id ?: "-",
         name = this.displayName ?: "-",
         email = this.email ?: "-",
-        imageUrl = this.photoUrl.toString(),
+        imageUrl = this.photoUrl?.toString(),
         friends = listOf()
     )
 }

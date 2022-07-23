@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/chats_list_nav_graph"
+    app:startDestination="@id/chatsListFragment">
+
+    <fragment
+        android:id="@+id/chatsListFragment"
+        android:name="com.dungeon.software.hackathon.presentation.chats_list_screen.ChatsListFragment"
+        android:label="ChatsListFragment" >
+        <action
+            android:id="@+id/action_chatsListFragment_to_groupChatFragment"
+            app:destination="@id/groupChatFragment" />
+        <action
+            android:id="@+id/action_chatsListFragment_to_chatFragment"
+            app:destination="@id/chatFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.dungeon.software.hackathon.presentation.chat_screen.ChatFragment"
+        android:label="ChatFragment" >
+        <action
+            android:id="@+id/action_chatFragment_to_userDetailsFragment"
+            app:destination="@id/userDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/groupChatFragment"
+        android:name="com.dungeon.software.hackathon.presentation.group_chat_screen.GroupChatFragment"
+        android:label="GroupChatFragment" >
+        <action
+            android:id="@+id/action_groupChatFragment_to_groupChatDetailsFragment"
+            app:destination="@id/groupChatDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/groupChatDetailsFragment"
+        android:name="com.dungeon.software.hackathon.presentation.group_chat_details_screen.GroupChatDetailsFragment"
+        android:label="GroupChatDetailsFragment" >
+        <action
+            android:id="@+id/action_groupChatDetailsFragment_to_opponentUserDetailsScreen"
+            app:destination="@id/opponentUserDetailsScreen" />
+    </fragment>
+    <fragment
+        android:id="@+id/opponentUserDetailsScreen"
+        android:name="com.dungeon.software.hackathon.presentation.opponent_user_details_screen.OpponentUserDetailsScreen"
+        android:label="OpponentUserDetailsScreen" />
+    <fragment
+        android:id="@+id/userDetailsFragment"
+        android:name="com.dungeon.software.hackathon.presentation.user_details_screen.UserDetailsFragment"
+        android:label="UserDetailsFragment" />
+</navigation>

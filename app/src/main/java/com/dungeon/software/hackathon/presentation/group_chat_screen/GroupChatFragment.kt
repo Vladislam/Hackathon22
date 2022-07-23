@@ -1,8 +1,7 @@
-package com.dungeon.software.hackathon.presentation.group_chat_sceen
+package com.dungeon.software.hackathon.presentation.group_chat_screen
 
 import com.dungeon.software.hackathon.R
 import com.dungeon.software.hackathon.base.fragment.BaseVMFragment
-import com.dungeon.software.hackathon.databinding.FragmentChatBinding
 import com.dungeon.software.hackathon.databinding.FragmentGroupChatBinding
 import kotlin.reflect.KClass
 

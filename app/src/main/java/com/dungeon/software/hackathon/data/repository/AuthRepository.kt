@@ -17,16 +17,16 @@ import kotlinx.coroutines.tasks.await
 
 interface AuthRepository {
 
-    suspend fun isLoggedIn() : Boolean
+    suspend fun isLoggedIn(): Boolean
 
-    suspend fun authWithIntent(intent: Intent) : UserDto?
+    suspend fun authWithIntent(intent: Intent): UserDto?
 
     suspend fun authWithGoogle(param: ActivityResultLauncher<Intent>)
 
     class Base(
         private val firebaseAuth: FirebaseAuth,
         private val context: Context
-        ) : AuthRepository {
+    ) : AuthRepository {
 
         override suspend fun isLoggedIn(): Boolean {
             return firebaseAuth.currentUser != null && firebaseAuth.currentUser?.isAnonymous == false
@@ -49,17 +49,13 @@ interface AuthRepository {
 
         private suspend fun firebaseAuthWithGoogle(account: GoogleSignInAccount?): UserDto? {
             val credential = GoogleAuthProvider.getCredential(account?.idToken, null)
-            if(firebaseAuth.currentUser?.isAnonymous == true) {
-                firebaseAuth.currentUser?.delete()
-            }
             firebaseAuth.signInWithCredential(credential).await()
             return account.toUserDto()
         }
 
         override suspend fun authWithGoogle(param: ActivityResultLauncher<Intent>) {
-
             val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(context.getString(R.string.default_web_client_id))
+                .requestIdToken(context.getString(R.string.API_KEY))
                 .requestEmail()
                 .build()
 
