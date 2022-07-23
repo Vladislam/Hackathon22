@@ -1,5 +1,7 @@
 package com.dungeon.software.hackathon.domain.models
 
+import com.dungeon.software.hackathon.data.models.MessageGroupDto
+
 data class MessageGroup(
     val uid: String,
     val message: String?,
@@ -25,4 +27,16 @@ data class MessageGroup(
     override fun getSender(): User = user
 
     override fun getMessageTimeSeen(): Long = timeSeen.values.min()
+
+    constructor(message: MessageGroupDto, allUserInGroup: List<User>) : this(
+        message.uid!!,
+        message.message,
+        message.imageUrl,
+        message.videoUrl,
+        message.timeSent,
+        message.seen.mapNotNull { id -> allUserInGroup.find { id == it.uid } },
+        allUserInGroup.find { message.userUid == it.uid }!!,
+        message.timeSeen
+    )
+
 }

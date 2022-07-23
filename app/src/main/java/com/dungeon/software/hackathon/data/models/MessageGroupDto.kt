@@ -5,11 +5,11 @@ import com.google.firebase.firestore.DocumentId
 data class MessageGroupDto(
     @DocumentId
     val uid: String?,
-    val message: List<String>,
+    val message: String?,
     val imageUrl: String?,
     val videoUrl: String?,
     val timeSent: Long,
     val seen: List<String>,
     val userUid: String,
-    val timeSeen: List<Long>
+    val timeSeen: Map<String, Long>
 ): MessageDataDto

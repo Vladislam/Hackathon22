@@ -15,5 +15,5 @@ val repositoriesModule = module {
     single<UserDataSource> { UserDataSource.Base(FirebaseFirestore.getInstance()) }
     single<AuthRepository> { AuthRepository.Base(get()) }
     single<UserRepository> { UserRepository.Base(get()) }
-    single<ChatRepository> { ChatRepository.Base(get(), get()) }
+    single<ChatRepository> { ChatRepository.Base(get(), get(), get()) }
 }
