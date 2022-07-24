@@ -25,6 +25,9 @@ interface ChatRepository {
 
     suspend fun sendMessage(message: MessageData, chatId: String)
 
+    fun disposeChatsListeners()
+    fun disposeChatListener()
+
     class Base(private val messageDataSource: MessageDataSource, private val chatDataSource: ChatDataSource, private val userDataSource: UserDataSource) : ChatRepository {
 
         private val scope = CoroutineScope(Dispatchers.IO)
@@ -102,6 +105,14 @@ interface ChatRepository {
 
         override suspend fun sendMessage(message: MessageData, chatId: String) {
             messageDataSource.sendMessage(message.toDto(), chatId)
+        }
+
+        override fun disposeChatsListeners() {
+            messageDataSource.cancelLastMessagesSubscription()
+        }
+
+        override fun disposeChatListener() {
+            messageDataSource.cancelMessageSubscription()
         }
 
         private fun List<Flow<ChatData>>.toSingleFlow(): Flow<ArrayList<ChatData>> {
