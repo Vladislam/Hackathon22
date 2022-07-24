@@ -38,7 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            app:cardBackgroundColor="@{message.isMine ? @color/light_green : @color/light_gray}"
+            app:cardBackgroundColor="@{message.isMine ? @color/light_green : @color/light_grey}"
             app:cardCornerRadius="20dp"
             app:cardElevation="5dp">
 

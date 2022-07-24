@@ -6,11 +6,19 @@ import android.animation.LayoutTransition
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.dungeon.software.hackathon.R
 import com.dungeon.software.hackathon.base.fragment.BaseVMFragment
 import com.dungeon.software.hackathon.databinding.FragmentChatsListBinding
+import com.dungeon.software.hackathon.domain.models.Chat
+import com.dungeon.software.hackathon.domain.models.GroupChat
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.launch
 import kotlin.reflect.KClass
 
+@ExperimentalCoroutinesApi
 class ChatsListFragment : BaseVMFragment<ChatsListViewModel, FragmentChatsListBinding>() {
 
     override val layoutId: Int
@@ -18,16 +26,39 @@ class ChatsListFragment : BaseVMFragment<ChatsListViewModel, FragmentChatsListBi
     override val viewModelClass: KClass<ChatsListViewModel>
         get() = ChatsListViewModel::class
 
+    private val adapter = ChatsListAdapter {
+        when (it) {
+            is Chat -> ChatsListFragmentDirections.actionChatsListFragmentToChatFragment(it)
+            is GroupChat -> ChatsListFragmentDirections.actionChatsListFragmentToGroupChatFragment(
+                it
+            )
+        }
+    }
+
     private val sortState: ChatSortStateHandler = ChatSortStateHandler()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        sortState.attach(binding, lifecycle)
+        binding.rvChats.adapter = adapter
+
         setupListeners()
+        initObservers()
+    }
+
+    private fun initObservers() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.chatsState.collect {
+                    adapter.submitList(it.toMutableList())
+                }
+            }
+        }
     }
 
     private fun setupListeners() = with(binding) {
+        viewModel.initSortState(sortState.attach(binding, lifecycle))
+
         includeSort.llSortContainer.apply {
             post {
                 translationY = -includeSort.llSortContainer.height.toFloat()
@@ -62,6 +93,11 @@ class ChatsListFragment : BaseVMFragment<ChatsListViewModel, FragmentChatsListBi
                 }
             }
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        viewModel.disposeChatsListeners()
     }
 
     private fun ViewGroup.setLayoutTransitionChanging() {

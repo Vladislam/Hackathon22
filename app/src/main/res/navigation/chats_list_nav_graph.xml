@@ -22,6 +22,9 @@
         <action
             android:id="@+id/action_chatFragment_to_userDetailsFragment"
             app:destination="@id/userDetailsFragment" />
+        <argument
+            android:name="chat"
+            app:argType="com.dungeon.software.hackathon.domain.models.Chat" />
     </fragment>
     <fragment
         android:id="@+id/groupChatFragment"
@@ -30,6 +33,9 @@
         <action
             android:id="@+id/action_groupChatFragment_to_groupChatDetailsFragment"
             app:destination="@id/groupChatDetailsFragment" />
+        <argument
+            android:name="groupChat"
+            app:argType="com.dungeon.software.hackathon.domain.models.GroupChat" />
     </fragment>
     <fragment
         android:id="@+id/groupChatDetailsFragment"

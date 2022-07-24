@@ -17,4 +17,12 @@ data class Chat(
         opponent
     )
 
+    override fun getChatImageUrl(): String? = opponent.imageUrl
+
+    override fun getChatName(): String = opponent.name
+
+    override fun getChatLastMessageTime(): Long = messages.lastOrNull()?.timeSeen ?: 0
+
+    override fun getChatLastMessage(): String = messages.lastOrNull()?.message.orEmpty()
+
 }

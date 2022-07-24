@@ -2,8 +2,11 @@ package com.dungeon.software.hackathon.domain.repository
 
 import com.dungeon.software.hackathon.data.data_source.ChatDataSource
 import com.dungeon.software.hackathon.data.data_source.MessageDataSource
-import com.dungeon.software.hackathon.data.models.*
 import com.dungeon.software.hackathon.data.data_source.UserDataSource
+import com.dungeon.software.hackathon.data.models.ChatDto
+import com.dungeon.software.hackathon.data.models.GroupChatDto
+import com.dungeon.software.hackathon.data.models.MessageDto
+import com.dungeon.software.hackathon.data.models.MessageGroupDto
 import com.dungeon.software.hackathon.domain.models.*
 import com.dungeon.software.hackathon.util.DataState
 import kotlinx.coroutines.CoroutineScope
@@ -28,7 +31,11 @@ interface ChatRepository {
     fun disposeChatsListeners()
     fun disposeChatListener()
 
-    class Base(private val messageDataSource: MessageDataSource, private val chatDataSource: ChatDataSource, private val userDataSource: UserDataSource) : ChatRepository {
+    class Base(
+        private val messageDataSource: MessageDataSource,
+        private val chatDataSource: ChatDataSource,
+        private val userDataSource: UserDataSource
+    ) : ChatRepository {
 
         private val scope = CoroutineScope(Dispatchers.IO)
 
@@ -62,12 +69,18 @@ interface ChatRepository {
         }
 
         private suspend fun getPeerToPeerChat(chat: GroupChatDto): Flow<GroupChat> {
-            val users = chat.opponents.map { scope.async { userDataSource.getUser(it) } }.awaitAll().mapNotNull { it }.map {
+            val users = chat.opponents.map { scope.async { userDataSource.getUser(it) } }.awaitAll()
+                .mapNotNull { it }.map {
                 User(it)
             }
             return messageDataSource.getMessages(chat.uid!!).mapNotNull { messageData ->
                 if (messageData is DataState.Data) {
-                    GroupChat(messageData.data.map { currentMessage -> MessageGroup(currentMessage as MessageGroupDto, users) }, chat, users)
+                    GroupChat(messageData.data.map { currentMessage ->
+                        MessageGroup(
+                            currentMessage as MessageGroupDto,
+                            users
+                        )
+                    }, chat, users)
                 } else {
                     null
                 }
@@ -116,7 +129,7 @@ interface ChatRepository {
         }
 
         private fun List<Flow<ChatData>>.toSingleFlow(): Flow<ArrayList<ChatData>> {
-            val firstFlow = first()
+            val firstFlow = firstOrNull() ?: return flow {}
             var combinedFlow: Flow<ArrayList<ChatData>> = flow { }
             forEachIndexed { index, flow ->
                 if (index == 0) {

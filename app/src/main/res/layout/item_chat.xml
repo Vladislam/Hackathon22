@@ -6,11 +6,12 @@
     <data>
 
         <variable
-            name="user"
-            type="com.dungeon.software.hackathon.domain.models.User" />
+            name="chat"
+            type="com.dungeon.software.hackathon.domain.models.ChatData" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clRoot"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="12dp">
@@ -18,7 +19,7 @@
         <include
             android:id="@+id/include_image"
             layout="@layout/image_rounded_view"
-            app:imageUrl="@{user.imageUrl}" />
+            app:imageUrl="@{chat.chatImageUrl}" />
 
         <TextView
             android:id="@+id/tvChatName"
@@ -27,6 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:textSize="18sp"
+            android:text="@{chat.chatName}"
             app:layout_constraintBottom_toTopOf="@id/tvLastMessage"
             app:layout_constraintEnd_toStartOf="@id/tvTimeLastMessageSent"
             app:layout_constraintStart_toEndOf="@id/include_image"
@@ -37,6 +39,7 @@
             android:id="@+id/tvTimeLastMessageSent"
             style="@style/Theme.Hackathon22.Text.Light"
             android:layout_width="wrap_content"
+            app:setDate="@{chat.chatLastMessageTime}"
             android:layout_height="wrap_content"
             android:layout_marginStart="6dp"
             app:layout_constraintBottom_toBottomOf="@id/tvChatName"
@@ -52,6 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_marginTop="4dp"
+            android:text="@{chat.chatLastMessage}"
             android:maxLines="1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
