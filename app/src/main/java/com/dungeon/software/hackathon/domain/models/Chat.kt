@@ -21,8 +21,10 @@ data class Chat(
 
     override fun getChatName(): String = opponent.name
 
-    override fun getChatLastMessageTime(): Long = messages.lastOrNull()?.timeSeen ?: 0
+    override fun getChatLastMessageTime(): Long = messages.lastOrNull()?.timeSent ?: 0
 
     override fun getChatLastMessage(): String = messages.lastOrNull()?.message.orEmpty()
+
+    override fun getChatMessages(): List<MessageData> = messages
 
 }

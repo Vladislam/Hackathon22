@@ -56,7 +56,7 @@ class ChatSortStateHandler {
         includeSort.etSearch.onTextChange { text ->
             job?.cancel()
             job = scope.launch {
-                delay(425)
+                delay(300)
                 sortState.emit(sortState.value.copy(query = text))
             }
         }

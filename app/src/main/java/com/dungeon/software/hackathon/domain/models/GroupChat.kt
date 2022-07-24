@@ -24,8 +24,10 @@ data class GroupChat(
     override fun getChatName(): String = name
 
     override fun getChatLastMessageTime(): Long =
-        messages.lastOrNull()?.timeSeen?.values?.min() ?: 0
+        messages.lastOrNull()?.timeSent ?: 0
 
     override fun getChatLastMessage(): String = messages.lastOrNull()?.message.orEmpty()
+
+    override fun getChatMessages(): List<MessageData> = messages
 
 }

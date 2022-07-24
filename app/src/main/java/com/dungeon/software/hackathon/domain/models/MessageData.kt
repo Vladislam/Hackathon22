@@ -13,5 +13,6 @@ interface MessageData {
     fun getIsMessageSeen(): Boolean
     fun getSender(): User
     fun getMessageTimeSeen(): Long?
-    fun isMine(): Boolean = getSender().uid == Firebase.auth.currentUser?.uid
+    fun isMine(): Boolean =
+        getSender().uid == Firebase.auth.currentUser?.uid
 }
