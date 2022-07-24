@@ -10,6 +10,7 @@ import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.lang.IllegalStateException
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -71,10 +72,16 @@ interface ChatDataSource {
                 .addOnSuccessListener { data ->
                     try {
                         data.toObject(ChatDto::class.java)?.also {
+                            if (it.opponent.isEmpty()) {
+                                throw IllegalStateException()
+                            }
                             emitter.resume(it)
                         } ?: kotlin.run { emitter.resumeWithException(NullPointerException()) }
                     } catch (e: Exception) {
                         data.toObject(GroupChatDto::class.java)?.also {
+                            if (it.opponents.isEmpty()) {
+                                throw IllegalStateException()
+                            }
                             emitter.resume(it)
                         } ?: kotlin.run { emitter.resumeWithException(NullPointerException()) }
                     }
@@ -161,11 +168,21 @@ interface ChatDataSource {
                     .get()
                     .addOnSuccessListener {
                         scope.launch {
-                            try {
-                                emitter.resume(it.toObjects(ChatDto::class.java).toCollection(ArrayList()))
-                            } catch (e: Throwable) {
-                                emitter.resume(it.toObjects(GroupChatDto::class.java).toCollection(ArrayList()))
-                            }
+                            emitter.resume(it.documents.mapNotNull {
+                                try {
+                                    it.toObject(GroupChatDto::class.java)?.apply {
+                                        if (opponents?.isEmpty() == true) {
+                                            throw IllegalStateException()
+                                        }
+                                    }
+                                } catch (e: Throwable) {
+                                    it.toObject(ChatDto::class.java)?.apply {
+                                        if (opponent?.isEmpty() == true) {
+                                            throw IllegalStateException()
+                                        }
+                                    }
+                                }
+                            }.toCollection(ArrayList()))
                         }
                     }
                     .addOnFailureListener {

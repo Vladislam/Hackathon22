@@ -60,6 +60,7 @@ interface MessageDataSource {
                             snapshot?.let { data ->
                                 try {
                                     data.toObjects(MessageDto::class.java).also {
+
                                         send(DataState.Data(it.toCollection(ArrayList()).firstOrNull()))
                                     }
                                 } catch (e: Throwable) {

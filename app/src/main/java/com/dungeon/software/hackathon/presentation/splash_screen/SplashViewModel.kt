@@ -19,21 +19,10 @@ class SplashViewModel(
     fun authWithIntent(intent: Intent) {
         launchRequest {
             val user = authRepository.authWithIntent(intent)
-            userRepository.createUser(user ?: return@launchRequest)
-            _checkedUser.emit(true)
-        }
-    }
-
-    // TODO: fix it
-    fun checkUser(intent: Intent) {
-        launchRequest {
-            if (authRepository.checkUser()) {
-                val user = authRepository.authWithIntent(intent)
+            if (!authRepository.checkUser()) {
                 userRepository.createUser(user ?: return@launchRequest)
-                _checkedUser.emit(true)
-            } else {
-                userRepository.fetchCurrentUser()
             }
+            _checkedUser.emit(true)
         }
     }
 

@@ -3,6 +3,7 @@ package com.dungeon.software.hackathon.di
 import com.dungeon.software.hackathon.presentation.chat_screen.ChatViewModel
 import com.dungeon.software.hackathon.presentation.chats_list_screen.ChatsListViewModel
 import com.dungeon.software.hackathon.presentation.friend_search_screen.FriendSearchViewModel
+import com.dungeon.software.hackathon.presentation.group_chat_screen.GroupChatViewModel
 import com.dungeon.software.hackathon.presentation.opponent_user_details_screen.OpponentUserDetailsViewModel
 import com.dungeon.software.hackathon.presentation.splash_screen.SplashViewModel
 import com.dungeon.software.hackathon.presentation.user_details_screen.UserDetailsViewModel
@@ -17,4 +18,5 @@ val viewModelModule = module {
     viewModel { ChatsListViewModel(get()) }
     viewModel { ChatViewModel() }
     viewModel { OpponentUserDetailsViewModel(get()) }
+    viewModel { GroupChatViewModel() }
 }
