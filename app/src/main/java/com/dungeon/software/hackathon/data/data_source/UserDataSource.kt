@@ -27,7 +27,7 @@ interface UserDataSource {
 
     suspend fun createUser(user: UserDto)
 
-    suspend fun changeName(id: String, name: String)
+    suspend fun changeName(name: String)
 
     class Base(private val firestore: FirebaseFirestore) : UserDataSource {
 
@@ -85,9 +85,11 @@ interface UserDataSource {
 
 
         override suspend fun addToFriends(user: UserDto) = suspendCoroutine { continuation ->
+            val friends : MutableList<String> = mutableListOf()
+            friends.add(user.uid ?: "")
             firestore.collection(USERS_COLLECTION)
                 .document()
-                .update("friends", user.friends)
+                .update(mapOf("friends" to friends))
                 .addOnSuccessListener {
                     continuation.resume(Unit)
                 }
@@ -109,11 +111,11 @@ interface UserDataSource {
                 }
         }
 
-        override suspend fun changeName(id: String, name: String) =
+        override suspend fun changeName(name: String) =
             suspendCancellableCoroutine { emitter ->
                 firestore.collection(USERS_COLLECTION)
-                    .document(id)
-                    .update("name", name)
+                    .document(FirebaseAuth.getInstance().currentUser?.uid ?: "")
+                    .update(mapOf("name" to name))
                     .addOnSuccessListener {
                         emitter.resume(Unit)
                     }

@@ -34,6 +34,10 @@ class UserDetailsViewModel(
         launchRequest { userRepository.deleteFile(url) }
     }
 
+    fun changeName(name: String){
+        launchRequest { userRepository.changeName(name) }
+    }
+
     fun logout() {
         launchRequest {
             authRepository.logout()

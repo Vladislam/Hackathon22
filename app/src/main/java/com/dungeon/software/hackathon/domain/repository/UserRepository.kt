@@ -26,7 +26,7 @@ interface UserRepository {
 
     suspend fun deleteFile(url: String) : String
 
-    suspend fun changeName(id: String, name: String)
+    suspend fun changeName(name: String)
 
     suspend fun getFriends(): List<User>
 
@@ -56,7 +56,7 @@ interface UserRepository {
 
         override suspend fun deleteFile(url: String) : String = storageDataSource.deleteFile(url)
 
-        override suspend fun changeName(id: String, name: String) = userDataSource.changeName(id, name)
+        override suspend fun changeName(name: String) = userDataSource.changeName(name)
 
         override suspend fun getFriends(): List<User> =
             userDataSource.getCurrentUser().friends.map { scope.async { userDataSource.getUser(it) } }.awaitAll().mapNotNull { it }.map { User(it) }

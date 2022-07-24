@@ -13,6 +13,7 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.dungeon.software.hackathon.R
 import com.dungeon.software.hackathon.base.fragment.BaseVMFragment
 import com.dungeon.software.hackathon.databinding.FragmentUserDetailsBinding
+import com.dungeon.software.hackathon.util.ext.onTextChange
 import kotlinx.coroutines.launch
 import kotlin.reflect.KClass
 
@@ -49,6 +50,10 @@ class UserDetailsFragment : BaseVMFragment<UserDetailsViewModel, FragmentUserDet
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.etName.onTextChange {
+            viewModel.changeName(it)
+        }
 
         binding.btnLogOut.setOnClickListener {
             viewModel.logout()
