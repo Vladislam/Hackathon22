@@ -17,6 +17,8 @@ class FriendsSearchAdapter constructor(private val listener: (User) -> Unit) :
 
     lateinit var me: User
 
+    lateinit var addToFriends: ((User) -> Unit)
+
     private val scope = CoroutineScope(Dispatchers.IO)
 
     val itemsSelected: MutableList<User> = mutableListOf()
@@ -29,6 +31,9 @@ class FriendsSearchAdapter constructor(private val listener: (User) -> Unit) :
         }
         includeImage.ivChatImage.setOnClickListener {
             listener.invoke(currentUser)
+        }
+        ibAddFriend.setOnClickListener {
+            addToFriends?.invoke(currentUser)
         }
 //        TODO: Check if user is my friend
     }

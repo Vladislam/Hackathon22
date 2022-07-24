@@ -41,6 +41,12 @@ class FriendSearchViewModel(
         _currentUser.emit(userRepository.fetchCurrentUser())
     }
 
+    fun addToFriends(user: User) {
+        launchRequest {
+            userRepository.addToFriends(user)
+        }
+    }
+
     fun searchUser(query: String) {
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
