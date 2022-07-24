@@ -5,7 +5,9 @@ import com.dungeon.software.hackathon.domain.models.ChatData
 import com.dungeon.software.hackathon.domain.models.User
 import com.dungeon.software.hackathon.domain.repository.ChatRepository
 import com.dungeon.software.hackathon.domain.repository.UserRepository
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 
 class FriendSearchViewModel(
@@ -16,12 +18,16 @@ class FriendSearchViewModel(
     private val _currentUser: MutableStateFlow<User?> = MutableStateFlow(null)
     val currentUser: StateFlow<User?> = _currentUser
 
+    private val _chatCreated: MutableSharedFlow<ChatData> = MutableSharedFlow()
+    val chatCreated: SharedFlow<ChatData> = _chatCreated
+
     init {
         getCurrentUser()
     }
 
     fun createChat(chat: ChatData) = launchRequest {
         chatRepository.createChat(chat)
+        _chatCreated.emit(chat)
     }
 
     private fun getCurrentUser() = launchRequest {

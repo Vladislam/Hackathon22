@@ -83,7 +83,7 @@ class ChatSortStateHandler {
 
     private fun SortType.changeVisibility() {
         binding?.includeSort?.apply {
-            ivByNameIcon.setVisible(this@changeVisibility is SortType.LastMessageTime)
+            ivByNameIcon.setVisible(this@changeVisibility is SortType.Name)
             ivByTimeLastMessage.setVisible(this@changeVisibility is SortType.LastMessageTime)
         }
     }

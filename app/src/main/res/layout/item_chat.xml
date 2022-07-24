@@ -1,52 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="12dp">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <include
-        android:id="@+id/include_image"
-        layout="@layout/image_rounded_view" />
+    <data>
 
-    <TextView
-        android:id="@+id/tvChatName"
-        style="@style/Theme.Hackathon22.Title"
-        android:layout_width="0dp"
+        <variable
+            name="user"
+            type="com.dungeon.software.hackathon.domain.models.User" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@id/tvLastMessage"
-        app:layout_constraintEnd_toStartOf="@id/tvTimeLastMessageSent"
-        app:layout_constraintStart_toEndOf="@id/include_image"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Stanley qwertyuiop[oiuytrewrtyuiopiuytrewt" />
+        android:padding="12dp">
 
-    <TextView
-        android:id="@+id/tvTimeLastMessageSent"
-        style="@style/Theme.Hackathon22.Text.Light"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/tvChatName"
-        app:layout_constraintTop_toTopOf="@id/tvChatName"
-        app:layout_constraintBottom_toBottomOf="@id/tvChatName"
-        tools:text="14:44" />
+        <include
+            android:id="@+id/include_image"
+            layout="@layout/image_rounded_view"
+            app:imageUrl="@{user.imageUrl}" />
 
-    <TextView
-        android:id="@+id/tvLastMessage"
-        style="@style/Theme.Hackathon22.Text"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="4dp"
-        android:maxLines="1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/include_image"
-        app:layout_constraintTop_toBottomOf="@id/tvChatName"
-        tools:text="texgdfsgdfsgdfsgsdfgskjlfngljkdfsngsdfjklbgljsdft@gmail.com" />
+        <TextView
+            android:id="@+id/tvChatName"
+            style="@style/Theme.Hackathon22.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@id/tvLastMessage"
+            app:layout_constraintEnd_toStartOf="@id/tvTimeLastMessageSent"
+            app:layout_constraintStart_toEndOf="@id/include_image"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Stanley qwertyuiop[oiuytrewrtyuiopiuytrewt" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/tvTimeLastMessageSent"
+            style="@style/Theme.Hackathon22.Text.Light"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            app:layout_constraintBottom_toBottomOf="@id/tvChatName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tvChatName"
+            app:layout_constraintTop_toTopOf="@id/tvChatName"
+            tools:text="14:44" />
+
+        <TextView
+            android:id="@+id/tvLastMessage"
+            style="@style/Theme.Hackathon22.Text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="4dp"
+            android:maxLines="1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/include_image"
+            app:layout_constraintTop_toBottomOf="@id/tvChatName"
+            tools:text="texgdfsgdfsgdfsgsdfgskjlfngljkdfsngsdfjklbgljsdft@gmail.com" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

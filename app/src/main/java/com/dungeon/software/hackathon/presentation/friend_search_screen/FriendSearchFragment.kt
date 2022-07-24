@@ -48,6 +48,33 @@ class FriendSearchFragment : BaseVMFragment<FriendSearchViewModel, FragmentFrien
                 }
             }
         }
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.loadingFlow.collect {
+                    if (it) showLoading()
+                    else hideLoading()
+                }
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.chatCreated.collect {
+                    findNavController().navigate(
+                        when (it) {
+                            is Chat -> FriendSearchFragmentDirections.actionFriendSearchFragmentToChatFragment2(
+                                it
+                            )
+                            is GroupChat -> FriendSearchFragmentDirections.actionFriendSearchFragmentToGroupChatFragment2(
+                                it
+                            )
+                            else -> {
+                                return@collect
+                            }
+                        }
+                    )
+                }
+            }
+        }
         adapter.submitList(
             mutableListOf(
                 User(

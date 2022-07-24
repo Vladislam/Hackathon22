@@ -1,7 +1,10 @@
 package com.dungeon.software.hackathon.domain.models
 
+import android.os.Parcelable
 import com.dungeon.software.hackathon.data.models.MessageGroupDto
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class MessageGroup(
     val uid: String,
     val message: String?,
@@ -11,7 +14,7 @@ data class MessageGroup(
     val seen: List<User>,
     val user: User,
     val timeSeen: Map<String, Long>
-) : MessageData {
+) : MessageData, Parcelable {
     override fun getMessageUid(): String = uid
 
     override fun getMessageText(): String? = message

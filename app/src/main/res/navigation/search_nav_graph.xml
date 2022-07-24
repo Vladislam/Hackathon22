@@ -14,6 +14,9 @@
         <action
             android:id="@+id/action_friendSearchFragment_to_opponentUserDetailsFragment"
             app:destination="@id/opponentUserDetailsFragment" />
+        <action
+            android:id="@+id/action_friendSearchFragment_to_chatFragment2"
+            app:destination="@id/chatFragment2" />
     </fragment>
     <fragment
         android:id="@+id/groupChatFragment2"
@@ -22,11 +25,18 @@
         <action
             android:id="@+id/action_groupChatFragment2_to_groupChatDetailsFragment3"
             app:destination="@id/groupChatDetailsFragment3" />
+        <argument
+            android:name="groupChat"
+            app:argType="com.dungeon.software.hackathon.domain.models.GroupChat" />
     </fragment>
     <fragment
         android:id="@+id/groupChatDetailsFragment3"
         android:name="com.dungeon.software.hackathon.presentation.group_chat_details_screen.GroupChatDetailsFragment"
-        android:label="GroupChatDetailsFragment" />
+        android:label="GroupChatDetailsFragment" >
+        <action
+            android:id="@+id/action_groupChatDetailsFragment3_to_opponentUserDetailsFragment"
+            app:destination="@id/opponentUserDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/opponentUserDetailsFragment"
         android:name="com.dungeon.software.hackathon.presentation.opponent_user_details_screen.OpponentUserDetailsFragment"
@@ -37,5 +47,13 @@
         <action
             android:id="@+id/action_opponentUserDetailsFragment_self"
             app:destination="@id/opponentUserDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/chatFragment2"
+        android:name="com.dungeon.software.hackathon.presentation.chat_screen.ChatFragment"
+        android:label="ChatFragment" >
+        <argument
+            android:name="chat"
+            app:argType="com.dungeon.software.hackathon.domain.models.Chat" />
     </fragment>
 </navigation>

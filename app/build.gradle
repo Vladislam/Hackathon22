@@ -112,4 +112,7 @@ dependencies {
 
     // LocalDateTime
     implementation 'com.jakewharton.threetenabp:threetenabp:1.4.0'
+
+    //analog rxBinding
+    implementation 'ru.ldralighieri.corbind:corbind:1.4.0'
 }

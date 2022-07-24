@@ -23,7 +23,7 @@ class ChatsListFragment : BaseVMFragment<ChatsListViewModel, FragmentChatsListBi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        sortState.attach(binding, viewLifecycleOwner.lifecycle)
+        sortState.attach(binding, lifecycle)
         setupListeners()
     }
 
