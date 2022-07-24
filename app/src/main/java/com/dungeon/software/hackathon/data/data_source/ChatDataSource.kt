@@ -26,7 +26,9 @@ interface ChatDataSource {
 
     suspend fun changeGroupName(id: String, name: String)
 
-    suspend fun getChats(): ArrayList<ChatDataDto>
+    suspend fun getChatsByOpponent(): ArrayList<ChatDataDto>
+
+    suspend fun getChatsByCreator(): ArrayList<ChatDataDto>
 
     companion object {
         val collectionChat = "chat"
@@ -132,7 +134,40 @@ interface ChatDataSource {
         }
 
 
-        override suspend fun getChats() = suspendCoroutine { emitter ->
+        override suspend fun getChatsByOpponent() = suspendCoroutine { emitter ->
+            FirebaseAuth.getInstance().currentUser?.also { user ->
+                firestore
+                    .collection(collectionChat)
+                    .whereEqualTo("opponent", FirebaseAuth.getInstance().currentUser?.uid)
+                    .get()
+                    .addOnSuccessListener {
+                        scope.launch {
+                            emitter.resume(it.documents.mapNotNull {
+                                try {
+                                    it.toObject(GroupChatDto::class.java)?.apply {
+                                        if (opponents?.isEmpty() == true) {
+                                            throw IllegalStateException()
+                                        }
+                                    }
+                                } catch (e: Throwable) {
+                                    it.toObject(ChatDto::class.java)?.apply {
+                                        if (opponent?.isEmpty() == true) {
+                                            throw IllegalStateException()
+                                        }
+                                    }
+                                }
+                            }.toCollection(ArrayList()))
+                        }
+                    }
+                    .addOnFailureListener {
+                        emitter.resumeWithException(it)
+                    }
+            } ?: run {
+                emitter.resumeWithException(CustomError.SomethingWentWrong)
+            }
+        }
+
+        override suspend fun getChatsByCreator() = suspendCoroutine { emitter ->
             FirebaseAuth.getInstance().currentUser?.also { user ->
                 firestore
                     .collection(collectionChat)

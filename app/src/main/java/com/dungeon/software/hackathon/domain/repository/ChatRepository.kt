@@ -117,7 +117,7 @@ interface ChatRepository {
         }
 
         override suspend fun getChats(): Flow<List<ChatData>> {
-            val chats = chatDataSource.getChats()
+            val chats = arrayListOf(scope.async { chatDataSource.getChatsByCreator() }, scope.async { chatDataSource.getChatsByOpponent() }).awaitAll().flatten()
 
             return chats.mapNotNull {
                 when (it) {
