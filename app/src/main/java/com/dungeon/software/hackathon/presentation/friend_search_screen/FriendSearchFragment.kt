@@ -113,6 +113,11 @@ class FriendSearchFragment : BaseVMFragment<FriendSearchViewModel, FragmentFrien
                 adapter.submitList(friend.filter {
                     currentUser?.uid != it.uid
                 }.toMutableList())
+                if (friend.isEmpty()) {
+                    binding.emptyState.visibility = View.VISIBLE
+                } else {
+                    binding.emptyState.visibility = View.GONE
+                }
             }.collect {
 
             }
