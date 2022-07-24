@@ -1,6 +1,8 @@
 package com.dungeon.software.hackathon.presentation.chat_screen
 
+import android.net.Uri
 import com.dungeon.software.hackathon.base.view_model.BaseViewModel
+import com.dungeon.software.hackathon.data.data_source.StorageDataSource
 import com.dungeon.software.hackathon.domain.models.Chat
 import com.dungeon.software.hackathon.domain.models.Message
 import com.dungeon.software.hackathon.domain.models.User
@@ -12,6 +14,7 @@ import kotlinx.coroutines.flow.StateFlow
 class ChatViewModel(
     private val chatRepository: ChatRepository,
     private val userRepository: UserRepository,
+    private val storageDataSource: StorageDataSource,
 ) : BaseViewModel() {
 
     private val _currentUser: MutableStateFlow<User?> = MutableStateFlow(null)
@@ -22,6 +25,22 @@ class ChatViewModel(
 
     init {
         getCurrentUser()
+    }
+
+    fun sendImage(uri: Uri, chatId: String, user: User) = launchRequest {
+        storageDataSource.saveFile(uri)
+        sendMessage(
+            Message(
+                "",
+                null,
+                uri.toString(),
+                null,
+                System.currentTimeMillis(),
+                false,
+                user,
+                null
+            ), chatId
+        )
     }
 
     fun sendMessage(message: Message, id: String) = launchRequest {

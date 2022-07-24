@@ -2,6 +2,7 @@ package com.dungeon.software.hackathon.presentation.chat_screen
 
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -14,6 +15,7 @@ import com.dungeon.software.hackathon.databinding.FragmentChatBinding
 import com.dungeon.software.hackathon.domain.models.Chat
 import com.dungeon.software.hackathon.domain.models.Message
 import com.dungeon.software.hackathon.domain.models.User
+import com.dungeon.software.hackathon.util.FilePicker
 import kotlinx.coroutines.launch
 import kotlin.reflect.KClass
 
@@ -27,6 +29,8 @@ class ChatFragment : BaseVMFragment<ChatViewModel, FragmentChatBinding>() {
     private var currentChat: Chat? = null
     private var currentUser: User? = null
 
+    private var filePicker: FilePicker? = null
+
     private val adapter = ChatAdapter {}
 
     companion object {
@@ -37,6 +41,7 @@ class ChatFragment : BaseVMFragment<ChatViewModel, FragmentChatBinding>() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.rvChat.adapter = adapter
+        filePicker = FilePicker(requireActivity() as AppCompatActivity)
 
         viewModel.getCurrentUser()
         initObservers()
@@ -109,7 +114,12 @@ class ChatFragment : BaseVMFragment<ChatViewModel, FragmentChatBinding>() {
             }
         }
         btnSendFile.setOnClickListener {
-
+            viewLifecycleOwner.lifecycleScope.launch {
+                currentChat?.let {
+                    val uri = filePicker?.getImageFile() ?: return@launch
+                    viewModel.sendImage(uri, it.uid, currentUser ?: return@launch)
+                }
+            }
         }
         ibBack.setOnClickListener {
             findNavController().popBackStack()
