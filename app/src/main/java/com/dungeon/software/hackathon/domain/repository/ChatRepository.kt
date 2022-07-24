@@ -7,7 +7,6 @@ import com.dungeon.software.hackathon.data.models.*
 import com.dungeon.software.hackathon.domain.models.*
 import com.dungeon.software.hackathon.util.DataState
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -38,7 +37,7 @@ interface ChatRepository {
         override suspend fun createChat(chat: ChatData): ChatData {
             val currentUser = FirebaseAuth.getInstance().currentUser?.uid ?: throw NullPointerException()
             return if (chat is Chat) {
-                val createdChat = chatDataSource.getPeerToPeerChatByOpponent(chat.opponent.uid)
+                val createdChat = chatDataSource.getPeerToPeerChatByOpponent(chat.opponent.uid) ?: chatDataSource.getPeerToPeerChatCreator(chat.opponent.uid)
                 return if (createdChat == null) {
                     chat.copy(uid = chatDataSource.createChat(chat.toDto(currentUser)))
                 } else {
