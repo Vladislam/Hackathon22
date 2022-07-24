@@ -1,10 +1,7 @@
 package com.dungeon.software.hackathon.presentation.chat_screen
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -19,7 +16,6 @@ import com.dungeon.software.hackathon.domain.models.Chat
 import com.dungeon.software.hackathon.domain.models.Message
 import com.dungeon.software.hackathon.domain.models.User
 import com.dungeon.software.hackathon.presentation.MainActivity
-import com.dungeon.software.hackathon.util.FilePicker
 import kotlinx.coroutines.launch
 import kotlin.reflect.KClass
 
@@ -123,7 +119,7 @@ class ChatFragment : BaseVMFragment<ChatViewModel, FragmentChatBinding>() {
             viewLifecycleOwner.lifecycleScope.launch {
                 currentChat?.let {
                     val uri = (requireActivity() as MainActivity).filePicker.getTakeImageFile()
-                    viewModel.sendImage(uri, it.uid, currentUser ?: return@launch)
+                    viewModel.sendImage(uri.toUri(), it.uid, currentUser ?: return@launch)
                 }
             }
         }

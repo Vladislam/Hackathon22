@@ -2,6 +2,7 @@ package com.dungeon.software.hackathon.presentation.group_chat_screen
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -14,6 +15,7 @@ import com.dungeon.software.hackathon.databinding.FragmentGroupChatBinding
 import com.dungeon.software.hackathon.domain.models.GroupChat
 import com.dungeon.software.hackathon.domain.models.MessageGroup
 import com.dungeon.software.hackathon.domain.models.User
+import com.dungeon.software.hackathon.presentation.MainActivity
 import kotlinx.coroutines.launch
 import kotlin.reflect.KClass
 
@@ -108,7 +110,12 @@ class GroupChatFragment : BaseVMFragment<GroupChatViewModel, FragmentGroupChatBi
             }
         }
         btnSendFile.setOnClickListener {
-
+            viewLifecycleOwner.lifecycleScope.launch {
+                currentChat?.let {
+                    val uri = (requireActivity() as MainActivity).filePicker.getTakeImageFile()
+                    viewModel.sendImage(uri.toUri(), it.uid, currentUser ?: return@launch)
+                }
+            }
         }
         ibBack.setOnClickListener {
             findNavController().popBackStack()
