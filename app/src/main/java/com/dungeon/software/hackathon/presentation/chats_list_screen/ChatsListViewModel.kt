@@ -51,11 +51,11 @@ class ChatsListViewModel(
                             is SortType.Name -> {
                                 if (sortState.sortType.desc) {
                                     chats.sortedByDescending {
-                                        it.getChatName()
+                                        it.getChatName().lowercase()
                                     }
                                 } else {
                                     chats.sortedBy {
-                                        it.getChatName()
+                                        it.getChatName().lowercase()
                                     }
                                 }
                             }

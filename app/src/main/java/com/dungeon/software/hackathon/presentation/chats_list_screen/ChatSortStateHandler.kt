@@ -22,7 +22,7 @@ class ChatSortStateHandler {
     private var byLastMessageTimeDesc: Boolean = true
     private var currentSort: SortType = SortType.Name(byNameDesc)
     private val sortState: MutableStateFlow<SortState> =
-        MutableStateFlow(SortState("", SortType.Name(true)))
+        MutableStateFlow(SortState(SortType.Name(true)))
 
     private val observer = LifecycleEventObserver { _, event ->
         if (event == Lifecycle.Event.ON_DESTROY) {
@@ -51,13 +51,6 @@ class ChatSortStateHandler {
             scope.launch {
                 SortType.LastMessageTime(if (currentSort is SortType.LastMessageTime) !byLastMessageTimeDesc else byLastMessageTimeDesc)
                     .emit()
-            }
-        }
-        includeSort.etSearch.onTextChange { text ->
-            job?.cancel()
-            job = scope.launch {
-                delay(300)
-                sortState.emit(sortState.value.copy(query = text))
             }
         }
     }
