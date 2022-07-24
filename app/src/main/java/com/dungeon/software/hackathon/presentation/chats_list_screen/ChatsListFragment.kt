@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.dungeon.software.hackathon.R
 import com.dungeon.software.hackathon.base.fragment.BaseVMFragment
 import com.dungeon.software.hackathon.databinding.FragmentChatsListBinding
@@ -27,12 +28,15 @@ class ChatsListFragment : BaseVMFragment<ChatsListViewModel, FragmentChatsListBi
         get() = ChatsListViewModel::class
 
     private val adapter = ChatsListAdapter {
-        when (it) {
-            is Chat -> ChatsListFragmentDirections.actionChatsListFragmentToChatFragment(it)
-            is GroupChat -> ChatsListFragmentDirections.actionChatsListFragmentToGroupChatFragment(
-                it
-            )
-        }
+        findNavController().navigate(
+            when (it) {
+                is Chat -> ChatsListFragmentDirections.actionChatsListFragmentToChatFragment(it)
+                is GroupChat -> ChatsListFragmentDirections.actionChatsListFragmentToGroupChatFragment(
+                    it
+                )
+                else -> return@ChatsListAdapter
+            }
+        )
     }
 
     private val sortState: ChatSortStateHandler = ChatSortStateHandler()

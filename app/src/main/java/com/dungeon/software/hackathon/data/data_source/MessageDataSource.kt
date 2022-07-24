@@ -13,8 +13,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.channelFlow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import kotlin.coroutines.resume
@@ -44,7 +42,7 @@ interface MessageDataSource {
 
         override fun getLastMessage(chatId: String) = callbackFlow<DataState<MessageDataDto?>> {
             FirebaseAuth.getInstance().currentUser?.also { user ->
-                var subs: ListenerRegistration = firestore
+                val subs: ListenerRegistration = firestore
                     .collection(ChatDataSource.collectionChat)
                     .document(user.uid)
                     .collection(ChatDataSource.collection)
@@ -60,11 +58,19 @@ interface MessageDataSource {
                             snapshot?.let { data ->
                                 try {
                                     data.toObjects(MessageDto::class.java).also {
-                                        send(DataState.Data(it.toCollection(ArrayList()).firstOrNull()))
+                                        send(
+                                            DataState.Data(
+                                                it.toCollection(ArrayList()).firstOrNull()
+                                            )
+                                        )
                                     }
                                 } catch (e: Throwable) {
                                     data.toObjects(MessageGroupDto::class.java).run {
-                                        send(DataState.Data(this.toCollection(ArrayList()).firstOrNull()))
+                                        send(
+                                            DataState.Data(
+                                                this.toCollection(ArrayList()).firstOrNull()
+                                            )
+                                        )
                                     }
                                 }
                             }
@@ -76,57 +82,62 @@ interface MessageDataSource {
             }
         }
 
-        override suspend fun sendMessage(message: MessageDataDto, chatId: String): Unit = suspendCoroutine { emitter ->
-            val user = FirebaseAuth.getInstance().currentUser ?: run {
-                emitter.resumeWithException(NullPointerException())
-                return@suspendCoroutine
-            }
-            firestore
-                .collection(ChatDataSource.collectionChat)
-                .document(user.uid)
-                .collection(ChatDataSource.collection)
-                .document(chatId)
-                .collection(messages)
-                .add(message)
-                .addOnSuccessListener {
-                    emitter.resume(Unit)
+        override suspend fun sendMessage(message: MessageDataDto, chatId: String): Unit =
+            suspendCoroutine { emitter ->
+                val user = FirebaseAuth.getInstance().currentUser ?: run {
+                    emitter.resumeWithException(NullPointerException())
+                    return@suspendCoroutine
                 }
-                .addOnFailureListener {
-                    emitter.resumeWithException(it)
-                }
-        }
-
-        override fun getMessages(chatId: String) = flow<DataState<ArrayList<MessageDataDto>>> {
-            FirebaseAuth.getInstance().currentUser?.also { user ->
-                lastMessagesSubscription.add(firestore
+                firestore
                     .collection(ChatDataSource.collectionChat)
                     .document(user.uid)
                     .collection(ChatDataSource.collection)
                     .document(chatId)
                     .collection(messages)
-                    .addSnapshotListener { snapshot, error ->
-                        scope.launch {
-                            error?.let {
-                                this@flow.emit(DataState.Error(it))
-                            }
-                            snapshot?.let { data ->
-                                try {
-                                    data.toObjects(MessageDto::class.java).also {
-                                        emit(DataState.Data(it.toCollection(ArrayList())))
-                                    }
-                                } catch (e: Throwable) {
-                                    Timber.v(e)
-                                    data.toObjects(MessageGroupDto::class.java).run {
-                                        emit(DataState.Data(this.toCollection(ArrayList())))
+                    .add(message)
+                    .addOnSuccessListener {
+                        emitter.resume(Unit)
+                    }
+                    .addOnFailureListener {
+                        emitter.resumeWithException(it)
+                    }
+            }
+
+        override fun getMessages(chatId: String) =
+            callbackFlow<DataState<ArrayList<MessageDataDto>>> {
+                FirebaseAuth.getInstance().currentUser?.also { user ->
+                    val subscription = firestore
+                        .collection(ChatDataSource.collectionChat)
+                        .document(user.uid)
+                        .collection(ChatDataSource.collection)
+                        .document(chatId)
+                        .collection(messages)
+                        .addSnapshotListener { snapshot, error ->
+                            scope.launch {
+                                error?.let {
+                                    this@callbackFlow.send(DataState.Error(it))
+                                }
+                                snapshot?.let { data ->
+                                    try {
+                                        data.toObjects(MessageDto::class.java).also {
+                                            send(DataState.Data(it.toCollection(ArrayList())))
+                                        }
+                                    } catch (e: Throwable) {
+                                        Timber.v(e)
+                                        data.toObjects(MessageGroupDto::class.java).run {
+                                            send(DataState.Data(this.toCollection(ArrayList())))
+                                        }
                                     }
                                 }
                             }
                         }
-                    })
-            } ?: run {
-                emit(DataState.Error(CustomError.SomethingWentWrong))
+                    awaitClose {
+                        subscription.remove()
+                    }
+                } ?: run {
+                    send(DataState.Error(CustomError.SomethingWentWrong))
+                }
             }
-        }
 
         override fun cancelLastMessagesSubscription() {
             lastMessagesSubscription.forEach {

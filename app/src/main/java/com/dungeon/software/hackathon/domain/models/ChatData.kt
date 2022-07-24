@@ -5,4 +5,5 @@ interface ChatData {
     fun getChatName(): String
     fun getChatLastMessageTime(): Long
     fun getChatLastMessage(): String
+    fun getChatMessages(): List<MessageData>
 }

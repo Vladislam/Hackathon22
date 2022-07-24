@@ -2,9 +2,9 @@ package com.dungeon.software.hackathon.util.ext
 
 import android.content.Context
 import android.text.format.DateFormat
-import org.threeten.bp.LocalDateTime
-import org.threeten.bp.format.DateTimeFormatter
-import org.threeten.bp.temporal.ChronoUnit
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 fun LocalDateTime.formatForChat(context: Context): String {
     val now = LocalDateTime.now()
