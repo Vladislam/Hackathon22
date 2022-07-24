@@ -21,5 +21,5 @@ val viewModelModule = module {
     viewModel { ChatViewModel(get(), get(), get()) }
     viewModel { OpponentUserDetailsViewModel(get()) }
     viewModel { GroupChatDetailsViewModel(get()) }
-    viewModel { GroupChatViewModel(get(), get()) }
+    viewModel { GroupChatViewModel(get(), get(), get()) }
 }

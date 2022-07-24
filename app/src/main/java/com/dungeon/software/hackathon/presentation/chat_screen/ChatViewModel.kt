@@ -28,7 +28,7 @@ class ChatViewModel(
         getCurrentUser()
     }
 
-    fun sendImage(uri: File, chatId: String, user: User) = launchRequest {
+    fun sendImage(uri: Uri, chatId: String, user: User) = launchRequest {
         sendMessage(
             Message(
                 "",
