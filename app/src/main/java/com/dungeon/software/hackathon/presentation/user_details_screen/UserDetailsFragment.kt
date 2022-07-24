@@ -58,7 +58,13 @@ class UserDetailsFragment : BaseVMFragment<UserDetailsViewModel, FragmentUserDet
 
         binding.btnLogOut.setOnClickListener {
             viewModel.logout()
-            findNavController().navigate(R.id.splashFragment)
+        }
+
+        lifecycleScope.launch {
+            viewModel.logout.collect {
+
+                findNavController().navigate(R.id.splashFragment)
+            }
         }
 
         binding.fab.setOnClickListener { openImageChooser() }
