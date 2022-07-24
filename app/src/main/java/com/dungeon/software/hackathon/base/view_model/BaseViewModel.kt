@@ -14,7 +14,7 @@ abstract class BaseViewModel : ViewModel() {
     val loadingFlow: SharedFlow<Boolean> = _loadingFlow
 
     protected val _error = Channel<CustomError>()
-    val error: Flow<CustomError> = _error.consumeAsFlow()
+    val error: Flow<CustomError> = _error.receiveAsFlow()
 
     protected fun launchRequest(
         context: CoroutineContext = Dispatchers.IO,

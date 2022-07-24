@@ -1,6 +1,5 @@
 package com.dungeon.software.hackathon.presentation.friend_search_screen
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Lifecycle
@@ -13,6 +12,7 @@ import com.dungeon.software.hackathon.databinding.FragmentFriendSearchBinding
 import com.dungeon.software.hackathon.domain.models.Chat
 import com.dungeon.software.hackathon.domain.models.GroupChat
 import com.dungeon.software.hackathon.domain.models.User
+import com.dungeon.software.hackathon.util.ext.onTextChange
 import kotlinx.coroutines.launch
 import kotlin.reflect.KClass
 
@@ -41,7 +41,6 @@ class FriendSearchFragment : BaseVMFragment<FriendSearchViewModel, FragmentFrien
         initObservers()
     }
 
-    @SuppressLint("UnsafeRepeatOnLifecycleDetector")
     private fun initObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -80,6 +79,10 @@ class FriendSearchFragment : BaseVMFragment<FriendSearchViewModel, FragmentFrien
     }
 
     private fun setupListeners() = with(binding) {
+        etSearch.onTextChange {
+            viewModel.searchUser(it)
+        }
+
         fabCreateChat.setOnClickListener {
             val selected = adapter.itemsSelected
             viewModel.createChat(
