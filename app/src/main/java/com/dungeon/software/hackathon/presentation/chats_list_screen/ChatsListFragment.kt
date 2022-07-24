@@ -54,6 +54,11 @@ class ChatsListFragment : BaseVMFragment<ChatsListViewModel, FragmentChatsListBi
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.chatsState.collect {
+                    if (it.isEmpty()) {
+                        binding.emptyState.visibility = View.VISIBLE
+                    } else {
+                        View.GONE
+                    }
                     adapter.submitList(it.toMutableList())
                 }
             }
