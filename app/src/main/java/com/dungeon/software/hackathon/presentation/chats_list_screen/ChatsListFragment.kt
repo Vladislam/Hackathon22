@@ -57,7 +57,7 @@ class ChatsListFragment : BaseVMFragment<ChatsListViewModel, FragmentChatsListBi
                     if (it.isEmpty()) {
                         binding.emptyState.visibility = View.VISIBLE
                     } else {
-                        View.GONE
+                        binding.emptyState.visibility = View.GONE
                     }
                     adapter.submitList(it.toMutableList())
                 }
