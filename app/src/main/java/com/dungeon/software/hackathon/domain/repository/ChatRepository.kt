@@ -13,10 +13,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.*
 
 interface ChatRepository {
 
@@ -47,16 +44,16 @@ interface ChatRepository {
             val chatModel = chatDataSource.getChat(chatId)
             return when (chatModel) {
                 is ChatDto -> {
-                    getGroupChat(chatModel)
+                    getPeerToPeerChat(chatModel)
                 }
                 is GroupChatDto -> {
-                    getPeerToPeerChat(chatModel)
+                    getGroupChat(chatModel)
                 }
                 else -> throw IllegalStateException()
             }
         }
 
-        private suspend fun getGroupChat(chat: ChatDto): Flow<Chat> {
+        private suspend fun getPeerToPeerChat(chat: ChatDto): Flow<Chat> {
             val user = User(userDataSource.getUser(chat.opponent)!!)
             return messageDataSource.getMessages(chat.uid!!).mapNotNull {
                 if (it is DataState.Data) {
@@ -68,7 +65,7 @@ interface ChatRepository {
             }
         }
 
-        private suspend fun getPeerToPeerChat(chat: GroupChatDto): Flow<GroupChat> {
+        private suspend fun getGroupChat(chat: GroupChatDto): Flow<GroupChat> {
             val users = chat.opponents.map { scope.async { userDataSource.getUser(it) } }.awaitAll()
                 .mapNotNull { it }.map {
                 User(it)
@@ -94,21 +91,35 @@ interface ChatRepository {
             return chats.mapNotNull {
                 when (it) {
                     is ChatDto -> {
-                        getLastGroupChat(it)
+                        getLastPeerToPeerChat(it)
                     }
                     is GroupChatDto -> {
-                        getPeerToPeerChat(it)
+                        getLastGroupChat(it)
                     }
                     else -> null
                 }
             }.toSingleFlow()
         }
 
-        private suspend fun getLastGroupChat(chat: ChatDto): Flow<Chat> {
+        private suspend fun getLastGroupChat(chat: GroupChatDto): Flow<GroupChat> {
+            val users = chat.opponents.map { scope.async { userDataSource.getUser(it) } }.awaitAll().mapNotNull { it }.map { User(it) }
+            return messageDataSource.getLastMessage(chat.uid!!).mapNotNull {
+                if (it is DataState.Data) {
+                    val data = (it.data as MessageGroupDto?)?.run { listOf(MessageGroup(this, users)) } ?: listOf()
+                    GroupChat(data, chat, users)
+                } else {
+                    null
+                }
+
+            }
+        }
+
+        private suspend fun getLastPeerToPeerChat(chat: ChatDto): Flow<Chat> {
             val user = User(userDataSource.getUser(chat.opponent)!!)
             return messageDataSource.getLastMessage(chat.uid!!).mapNotNull {
                 if (it is DataState.Data) {
-                    Chat(listOf(Message(it as MessageDto, user)), chat, user)
+                    val data = (it.data as MessageDto?)?.run { listOf(Message(this, user)) } ?: listOf()
+                    Chat(data, chat, user)
                 } else {
                     null
                 }
@@ -130,15 +141,9 @@ interface ChatRepository {
 
         private fun List<Flow<ChatData>>.toSingleFlow(): Flow<ArrayList<ChatData>> {
             val firstFlow = firstOrNull() ?: return flow {}
-            var combinedFlow: Flow<ArrayList<ChatData>> = flow { }
+            var combinedFlow: Flow<ArrayList<ChatData>> = firstFlow.map { arrayListOf(it) }
             forEachIndexed { index, flow ->
                 if (index == 0) {
-                    return@forEachIndexed
-                }
-                if (index == 1) {
-                    combinedFlow = firstFlow.combine(flow) { first, second ->
-                        arrayListOf(first, second)
-                    }
                     return@forEachIndexed
                 }
                 combinedFlow = combinedFlow.combine(flow) { first, second ->
