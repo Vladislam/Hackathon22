@@ -74,15 +74,15 @@ interface ChatRepository {
 
         private suspend fun getPeerToPeerChat(chat: ChatDto): Flow<Chat> {
             val user = User(userDataSource.getUser(chat.opponent)!!)
-            val currentUser = User(userDataSource.getCurrentUser())
+            val creator = User(userDataSource.getUser(chat.creator)!!)
             return messageDataSource.getMessages(chat.uid!!).mapNotNull {
                 if (it is DataState.Data) {
                     Chat(it.data.map {
                         Message(
                             it as MessageDto,
-                            if (it.userUid == currentUser.uid) currentUser else user
+                            if (it.userUid == creator.uid) creator else user
                         )
-                    }, chat, user)
+                    }, chat, if (FirebaseAuth.getInstance().currentUser?.uid == creator.uid) user else creator)
                 } else {
                     null
                 }
@@ -155,12 +155,13 @@ interface ChatRepository {
         }
 
         private suspend fun getLastPeerToPeerChat(chat: ChatDto): Flow<Chat> {
+            val creator = User(userDataSource.getUser(chat.creator)!!)
             val user = User(userDataSource.getUser(chat.opponent)!!)
             return messageDataSource.getLastMessage(chat.uid!!).mapNotNull {
                 if (it is DataState.Data) {
                     val data =
                         (it.data as MessageDto?)?.run { listOf(Message(this, user)) } ?: listOf()
-                    Chat(data, chat, user)
+                    Chat(data, chat, if (FirebaseAuth.getInstance().currentUser?.uid == user.uid) creator else user)
                 } else {
                     null
                 }
