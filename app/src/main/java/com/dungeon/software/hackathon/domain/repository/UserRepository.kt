@@ -35,7 +35,7 @@ interface UserRepository {
                 is SortType.LastMessageTime -> {
                     userDataSource.getListUsersByEmail(sortState.query, !type.desc)
                 }
-            }.map {
+            }.toSet().map {
                 User(it)
             }
         }
