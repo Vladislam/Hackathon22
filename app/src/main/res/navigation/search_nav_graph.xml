@@ -11,24 +11,24 @@
         <action
             android:id="@+id/action_friendSearchFragment_to_groupChatFragment2"
             app:destination="@id/groupChatFragment2"
-            app:enterAnim="@anim/pop_exit"
-            app:exitAnim="@anim/pop_enter"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/pop_enter"
+            app:popExitAnim="@anim/pop_exit" />
         <action
             android:id="@+id/action_friendSearchFragment_to_opponentUserDetailsFragment"
             app:destination="@id/opponentUserDetailsFragment"
-            app:enterAnim="@anim/pop_exit"
-            app:exitAnim="@anim/pop_enter"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/pop_enter"
+            app:popExitAnim="@anim/pop_exit" />
         <action
             android:id="@+id/action_friendSearchFragment_to_chatFragment2"
             app:destination="@id/chatFragment2"
-            app:enterAnim="@anim/pop_exit"
-            app:exitAnim="@anim/pop_enter"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/pop_enter"
+            app:popExitAnim="@anim/pop_exit" />
     </fragment>
     <fragment
         android:id="@+id/groupChatFragment2"
@@ -37,10 +37,10 @@
         <action
             android:id="@+id/action_groupChatFragment2_to_groupChatDetailsFragment3"
             app:destination="@id/groupChatDetailsFragment3"
-            app:enterAnim="@anim/pop_exit"
-            app:exitAnim="@anim/pop_enter"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/pop_enter"
+            app:popExitAnim="@anim/pop_exit"/>
         <argument
             android:name="groupChat"
             app:argType="com.dungeon.software.hackathon.domain.models.GroupChat" />
@@ -52,10 +52,10 @@
         <action
             android:id="@+id/action_groupChatDetailsFragment3_to_opponentUserDetailsFragment"
             app:destination="@id/opponentUserDetailsFragment"
-            app:enterAnim="@anim/pop_exit"
-            app:exitAnim="@anim/pop_enter"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/pop_enter"
+            app:popExitAnim="@anim/pop_exit"/>
     </fragment>
     <fragment
         android:id="@+id/opponentUserDetailsFragment"
@@ -67,10 +67,10 @@
         <action
             android:id="@+id/action_opponentUserDetailsFragment_self"
             app:destination="@id/opponentUserDetailsFragment"
-            app:enterAnim="@anim/pop_exit"
-            app:exitAnim="@anim/pop_enter"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/pop_enter"
+            app:popExitAnim="@anim/pop_exit"/>
     </fragment>
     <fragment
         android:id="@+id/chatFragment2"
