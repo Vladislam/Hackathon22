@@ -17,8 +17,8 @@ class FriendSearchViewModel(
     private val userRepository: UserRepository,
 ) : BaseViewModel() {
 
-    private val _currentUser: MutableStateFlow<User?> = MutableStateFlow(null)
-    val currentUser: StateFlow<User?> = _currentUser
+    private val _currentUser: MutableSharedFlow<User> = MutableSharedFlow()
+    val currentUser = _currentUser.asSharedFlow()
 
     private val _chatCreated: MutableSharedFlow<ChatData> = MutableSharedFlow()
     val chatCreated: SharedFlow<ChatData> = _chatCreated

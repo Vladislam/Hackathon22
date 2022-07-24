@@ -10,7 +10,7 @@ data class User(
     val name: String,
     val email: String,
     val imageUrl: String?,
-    val friends: List<String>
+    var friends: List<String>
 ) : Parcelable {
 
     constructor(user: UserDto): this(user.uid!!, user.name, user.email, user.imageUrl, user.friends)

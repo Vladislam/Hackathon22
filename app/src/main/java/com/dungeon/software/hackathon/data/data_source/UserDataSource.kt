@@ -85,11 +85,9 @@ interface UserDataSource {
 
 
         override suspend fun addToFriends(user: UserDto) = suspendCoroutine { continuation ->
-            val friends : MutableList<String> = mutableListOf()
-            friends.add(user.uid ?: "")
             firestore.collection(USERS_COLLECTION)
-                .document()
-                .update(mapOf("friends" to friends))
+                .document(FirebaseAuth.getInstance().currentUser?.uid.orEmpty())
+                .update(mapOf("friends" to user.friends))
                 .addOnSuccessListener {
                     continuation.resume(Unit)
                 }

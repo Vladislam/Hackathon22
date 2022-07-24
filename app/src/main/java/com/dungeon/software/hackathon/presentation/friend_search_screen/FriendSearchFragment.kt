@@ -13,6 +13,7 @@ import com.dungeon.software.hackathon.domain.models.Chat
 import com.dungeon.software.hackathon.domain.models.GroupChat
 import com.dungeon.software.hackathon.domain.models.User
 import com.dungeon.software.hackathon.util.ext.onTextChange
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import kotlin.reflect.KClass
 
@@ -83,6 +84,10 @@ class FriendSearchFragment : BaseVMFragment<FriendSearchViewModel, FragmentFrien
             viewModel.searchUser(it)
         }
 
+        adapter.addToFriends = {
+            viewModel.addToFriends(it)
+        }
+
         fabCreateChat.setOnClickListener {
             val selected = adapter.itemsSelected
             viewModel.createChat(
@@ -103,8 +108,11 @@ class FriendSearchFragment : BaseVMFragment<FriendSearchViewModel, FragmentFrien
             )
         }
         lifecycleScope.launch {
-            viewModel.friends.collect {
-                adapter.submitList(it.toMutableList())
+            viewModel.friends.combine(viewModel.currentUser) { friend, user ->
+                adapter.me = user
+                adapter.submitList(friend.toMutableList())
+            }.collect {
+
             }
         }
     }
