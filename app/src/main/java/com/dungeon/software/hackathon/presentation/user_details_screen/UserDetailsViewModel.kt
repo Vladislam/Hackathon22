@@ -2,13 +2,13 @@ package com.dungeon.software.hackathon.presentation.user_details_screen
 
 import android.content.Context
 import android.net.Uri
-import com.dungeon.software.hackathon.R
 import com.dungeon.software.hackathon.base.view_model.BaseViewModel
 import com.dungeon.software.hackathon.domain.models.User
 import com.dungeon.software.hackathon.domain.repository.AuthRepository
 import com.dungeon.software.hackathon.domain.repository.UserRepository
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.tasks.await
@@ -45,11 +45,13 @@ class UserDetailsViewModel(
 
     fun logout() {
         launchRequest {
-            GoogleSignIn.getClient(get<Context>(), GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("12243085829-b4grfg7t41m9k2u8nqg4f4sgoc7m60o2.apps.googleusercontent.com")
-                .requestEmail()
-                .build()).signOut().await()
-            authRepository.logout()
+            GoogleSignIn.getClient(
+                get<Context>(), GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken("12243085829-b4grfg7t41m9k2u8nqg4f4sgoc7m60o2.apps.googleusercontent.com")
+                    .requestEmail()
+                    .build()
+            ).signOut().await()
+            FirebaseAuth.getInstance().signOut()
             _logout.emit(true)
         }
     }
