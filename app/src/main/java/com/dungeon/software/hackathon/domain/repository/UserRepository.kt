@@ -2,15 +2,16 @@ package com.dungeon.software.hackathon.domain.repository
 
 import android.net.Uri
 import com.dungeon.software.hackathon.data.data_source.StorageDataSource
-import com.dungeon.software.hackathon.data.models.UserDto
 import com.dungeon.software.hackathon.data.data_source.UserDataSource
+import com.dungeon.software.hackathon.data.models.UserDto
 import com.dungeon.software.hackathon.domain.models.User
-import com.dungeon.software.hackathon.presentation.chats_list_screen.SortState
-import com.dungeon.software.hackathon.presentation.chats_list_screen.SortType
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 
 interface UserRepository {
 
-    suspend fun getUserList(sortState: SortState): List<User>
+    suspend fun getUserList(query: String): List<User>
 
     suspend fun fetchCurrentUser(): User
 
@@ -26,18 +27,13 @@ interface UserRepository {
 
     class Base(private val userDataSource: UserDataSource, private val storageDataSource: StorageDataSource) : UserRepository {
 
-        override suspend fun getUserList(sortState: SortState): List<User> {
-            val type = sortState.sortType
-            return when (type) {
-                is SortType.Name -> {
-                    userDataSource.getListUsersByName(sortState.query, !type.desc)
-                }
-                is SortType.LastMessageTime -> {
-                    userDataSource.getListUsersByEmail(sortState.query, !type.desc)
-                }
-            }.toSet().map {
-                User(it)
-            }
+        private val scope = CoroutineScope(Dispatchers.IO)
+
+        override suspend fun getUserList(query: String): List<User> {
+            val byName = scope.async { userDataSource.getListUsersByName(query) }
+            val byEmail = scope.async { userDataSource.getListUsersByEmail(query) }
+
+            return byName.await().toCollection(ArrayList()).apply { addAll(byEmail.await()) }.toSet().map { User(it) }
         }
 
         override suspend fun fetchCurrentUser(): User = User(userDataSource.getCurrentUser())

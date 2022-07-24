@@ -13,9 +13,9 @@ import kotlin.coroutines.suspendCoroutine
 
 interface UserDataSource {
 
-    suspend fun getListUsersByName(query: String, ascending: Boolean): List<UserDto>
+    suspend fun getListUsersByName(query: String): List<UserDto>
 
-    suspend fun getListUsersByEmail(query: String, ascending: Boolean): List<UserDto>
+    suspend fun getListUsersByEmail(query: String): List<UserDto>
 
     suspend fun getCurrentUser(): UserDto
 
@@ -31,31 +31,29 @@ interface UserDataSource {
 
     class Base(private val firestore: FirebaseFirestore) : UserDataSource {
 
-        override suspend fun getListUsersByName(query: String, ascending: Boolean): List<UserDto> = suspendCoroutine { continuation ->
+        override suspend fun getListUsersByName(query: String): List<UserDto> = suspendCoroutine { continuation ->
             firestore.collection(USERS_COLLECTION)
                 .addStringEqualIfNotEmpty("name", query)
                 .get()
                 .addOnSuccessListener { querySnapshot ->
-                    continuation.resume(querySnapshot.toObjects(UserDto::class.java).sortByDescendingOrAscending(ascending, { it.name }))
+                    continuation.resume(querySnapshot.toObjects(UserDto::class.java))
                 }
                 .addOnFailureListener { exception ->
                     continuation.resumeWithException(exception)
                 }
         }
 
-        override suspend fun getListUsersByEmail(query: String, ascending: Boolean): List<UserDto> = suspendCoroutine { continuation ->
+        override suspend fun getListUsersByEmail(query: String): List<UserDto> = suspendCoroutine { continuation ->
             firestore.collection(USERS_COLLECTION)
                 .addStringEqualIfNotEmpty("email", query)
                 .get()
                 .addOnSuccessListener { querySnapshot ->
-                    continuation.resume(querySnapshot.toObjects(UserDto::class.java).sortByDescendingOrAscending(ascending, { it.email }))
+                    continuation.resume(querySnapshot.toObjects(UserDto::class.java))
                 }
                 .addOnFailureListener { exception ->
                     continuation.resumeWithException(exception)
                 }
         }
-
-        private fun <T> List<T>.sortByDescendingOrAscending(ascending: Boolean, compare: (T) -> String) = if (ascending) this.sortedBy { compare(it) } else sortedByDescending { compare(it) }
 
         private fun CollectionReference.addStringEqualIfNotEmpty(data: String, value: String) = if (value.isEmpty()) this else this.whereEqualTo(data, value)
 
