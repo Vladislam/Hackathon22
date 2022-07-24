@@ -71,7 +71,7 @@ interface UserDataSource {
                 }
         }
 
-        override suspend fun getUser(id: String): UserDto? = suspendCoroutine { continuation ->
+        override suspend fun getUser(id: String): UserDto? = suspendCancellableCoroutine { continuation ->
             firestore.collection(USERS_COLLECTION)
                 .document(id)
                 .get()
