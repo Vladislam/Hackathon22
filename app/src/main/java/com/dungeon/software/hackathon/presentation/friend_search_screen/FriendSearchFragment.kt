@@ -110,7 +110,9 @@ class FriendSearchFragment : BaseVMFragment<FriendSearchViewModel, FragmentFrien
         lifecycleScope.launch {
             viewModel.friends.combine(viewModel.currentUser) { friend, user ->
                 adapter.me = user
-                adapter.submitList(friend.toMutableList())
+                adapter.submitList(friend.filter {
+                    currentUser?.uid != it.uid
+                }.toMutableList())
             }.collect {
 
             }

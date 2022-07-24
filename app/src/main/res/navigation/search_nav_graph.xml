@@ -7,24 +7,40 @@
     <fragment
         android:id="@+id/friendSearchFragment"
         android:name="com.dungeon.software.hackathon.presentation.friend_search_screen.FriendSearchFragment"
-        android:label="FriendSearchFragment" >
+        android:label="FriendSearchFragment">
         <action
             android:id="@+id/action_friendSearchFragment_to_groupChatFragment2"
-            app:destination="@id/groupChatFragment2" />
+            app:destination="@id/groupChatFragment2"
+            app:enterAnim="@anim/pop_exit"
+            app:exitAnim="@anim/pop_enter"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_friendSearchFragment_to_opponentUserDetailsFragment"
-            app:destination="@id/opponentUserDetailsFragment" />
+            app:destination="@id/opponentUserDetailsFragment"
+            app:enterAnim="@anim/pop_exit"
+            app:exitAnim="@anim/pop_enter"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_friendSearchFragment_to_chatFragment2"
-            app:destination="@id/chatFragment2" />
+            app:destination="@id/chatFragment2"
+            app:enterAnim="@anim/pop_exit"
+            app:exitAnim="@anim/pop_enter"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/groupChatFragment2"
         android:name="com.dungeon.software.hackathon.presentation.group_chat_screen.GroupChatFragment"
-        android:label="GroupChatFragment" >
+        android:label="GroupChatFragment">
         <action
             android:id="@+id/action_groupChatFragment2_to_groupChatDetailsFragment3"
-            app:destination="@id/groupChatDetailsFragment3" />
+            app:destination="@id/groupChatDetailsFragment3"
+            app:enterAnim="@anim/pop_exit"
+            app:exitAnim="@anim/pop_enter"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <argument
             android:name="groupChat"
             app:argType="com.dungeon.software.hackathon.domain.models.GroupChat" />
@@ -32,26 +48,34 @@
     <fragment
         android:id="@+id/groupChatDetailsFragment3"
         android:name="com.dungeon.software.hackathon.presentation.group_chat_details_screen.GroupChatDetailsFragment"
-        android:label="GroupChatDetailsFragment" >
+        android:label="GroupChatDetailsFragment">
         <action
             android:id="@+id/action_groupChatDetailsFragment3_to_opponentUserDetailsFragment"
-            app:destination="@id/opponentUserDetailsFragment" />
+            app:destination="@id/opponentUserDetailsFragment"
+            app:enterAnim="@anim/pop_exit"
+            app:exitAnim="@anim/pop_enter"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/opponentUserDetailsFragment"
         android:name="com.dungeon.software.hackathon.presentation.opponent_user_details_screen.OpponentUserDetailsFragment"
-        android:label="OpponentUserDetailsFragment" >
+        android:label="OpponentUserDetailsFragment">
         <argument
             android:name="user"
             app:argType="com.dungeon.software.hackathon.domain.models.User" />
         <action
             android:id="@+id/action_opponentUserDetailsFragment_self"
-            app:destination="@id/opponentUserDetailsFragment" />
+            app:destination="@id/opponentUserDetailsFragment"
+            app:enterAnim="@anim/pop_exit"
+            app:exitAnim="@anim/pop_enter"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/chatFragment2"
         android:name="com.dungeon.software.hackathon.presentation.chat_screen.ChatFragment"
-        android:label="ChatFragment" >
+        android:label="ChatFragment">
         <argument
             android:name="chat"
             app:argType="com.dungeon.software.hackathon.domain.models.Chat" />
