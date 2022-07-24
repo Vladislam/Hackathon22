@@ -34,8 +34,7 @@ class FriendSearchViewModel(
     }
 
     fun createChat(chat: ChatData) = launchRequest {
-        chatRepository.createChat(chat)
-        _chatCreated.emit(chat)
+        _chatCreated.emit(chatRepository.createChat(chat))
     }
 
     private fun getCurrentUser() = launchRequest {

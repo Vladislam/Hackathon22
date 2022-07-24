@@ -3,10 +3,7 @@ package com.dungeon.software.hackathon.domain.repository
 import com.dungeon.software.hackathon.data.data_source.ChatDataSource
 import com.dungeon.software.hackathon.data.data_source.MessageDataSource
 import com.dungeon.software.hackathon.data.data_source.UserDataSource
-import com.dungeon.software.hackathon.data.models.ChatDto
-import com.dungeon.software.hackathon.data.models.GroupChatDto
-import com.dungeon.software.hackathon.data.models.MessageDto
-import com.dungeon.software.hackathon.data.models.MessageGroupDto
+import com.dungeon.software.hackathon.data.models.*
 import com.dungeon.software.hackathon.domain.models.*
 import com.dungeon.software.hackathon.util.DataState
 import kotlinx.coroutines.CoroutineScope
@@ -17,7 +14,7 @@ import kotlinx.coroutines.flow.*
 
 interface ChatRepository {
 
-    suspend fun createChat(chat: ChatData)
+    suspend fun createChat(chat: ChatData): ChatData
 
     suspend fun getChat(chatId: String): Flow<ChatData>
 
@@ -36,8 +33,29 @@ interface ChatRepository {
 
         private val scope = CoroutineScope(Dispatchers.IO)
 
-        override suspend fun createChat(chat: ChatData) {
-            chatDataSource.createChat(chat.toDto())
+        override suspend fun createChat(chat: ChatData): ChatData {
+            return if (chat is Chat) {
+                val createdChat = chatDataSource.getPeerToPeerChatByOpponent(chat.opponent.uid)
+                return if (createdChat == null) {
+                    chatDataSource.createChat(chat.toDto())
+                    chat
+                } else {
+                    Chat(chat.messages, createdChat.getUid().orEmpty(), chat.opponent)
+                }
+            } else {
+                chatDataSource.createChat(chat.toDto())
+                chat
+            }
+        }
+
+        private fun ChatDataDto.getUid() = when (this) {
+            is ChatDto -> {
+                this.uid
+            }
+            is GroupChatDto -> {
+                this.uid
+            }
+            else -> throw IllegalStateException()
         }
 
         override suspend fun getChat(chatId: String): Flow<ChatData> {
@@ -68,8 +86,8 @@ interface ChatRepository {
         private suspend fun getGroupChat(chat: GroupChatDto): Flow<GroupChat> {
             val users = chat.opponents.map { scope.async { userDataSource.getUser(it) } }.awaitAll()
                 .mapNotNull { it }.map {
-                User(it)
-            }
+                    User(it)
+                }
             return messageDataSource.getMessages(chat.uid!!).mapNotNull { messageData ->
                 if (messageData is DataState.Data) {
                     GroupChat(messageData.data.map { currentMessage ->

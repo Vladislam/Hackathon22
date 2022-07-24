@@ -5,6 +5,8 @@ import com.dungeon.software.hackathon.data.data_source.StorageDataSource
 import com.dungeon.software.hackathon.data.data_source.UserDataSource
 import com.dungeon.software.hackathon.data.models.UserDto
 import com.dungeon.software.hackathon.domain.models.User
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -35,10 +37,11 @@ interface UserRepository {
         private val scope = CoroutineScope(Dispatchers.IO)
 
         override suspend fun getUserList(query: String): List<User> {
+            val userUid = FirebaseAuth.getInstance().currentUser?.uid
             val byName = scope.async { userDataSource.getListUsersByName(query) }
             val byEmail = scope.async { userDataSource.getListUsersByEmail(query) }
 
-            return byName.await().toCollection(ArrayList()).apply { addAll(byEmail.await()) }.toSet().map { User(it) }
+            return byName.await().toCollection(ArrayList()).apply { addAll(byEmail.await()) }.toSet().map { User(it) }.filter { userUid != it.uid }
         }
 
         override suspend fun fetchCurrentUser(): User = User(userDataSource.getCurrentUser())

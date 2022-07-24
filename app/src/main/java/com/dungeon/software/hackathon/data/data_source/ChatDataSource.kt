@@ -20,6 +20,8 @@ interface ChatDataSource {
 
     suspend fun getChat(id: String): ChatDataDto
 
+    suspend fun getPeerToPeerChatByOpponent(opponentId: String): ChatDataDto?
+
     suspend fun changeGroupImage(id: String, image: String)
 
     suspend fun changeGroupName(id: String, name: String)
@@ -76,6 +78,25 @@ interface ChatDataSource {
                             emitter.resume(it)
                         } ?: kotlin.run { emitter.resumeWithException(NullPointerException()) }
                     }
+                }
+                .addOnFailureListener {
+                    emitter.resumeWithException(it)
+                }
+        }
+
+        override suspend fun getPeerToPeerChatByOpponent(opponentId: String): ChatDataDto? = suspendCoroutine { emitter ->
+            val user = FirebaseAuth.getInstance().currentUser ?: run {
+                emitter.resumeWithException(NullPointerException())
+                return@suspendCoroutine
+            }
+            firestore
+                .collection(collectionChat)
+                .document(user.uid)
+                .collection(collection)
+                .whereEqualTo("opponent", opponentId)
+                .get()
+                .addOnSuccessListener {
+                    emitter.resume(it.toObjects(ChatDto::class.java).firstOrNull())
                 }
                 .addOnFailureListener {
                     emitter.resumeWithException(it)
