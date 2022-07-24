@@ -116,7 +116,7 @@ class FriendSearchFragment : BaseVMFragment<FriendSearchViewModel, FragmentFrien
                 if (friend.isEmpty()) {
                     binding.emptyState.visibility = View.VISIBLE
                 } else {
-                    View.GONE
+                    binding.emptyState.visibility = View.GONE
                 }
             }.collect {
 

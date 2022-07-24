@@ -46,6 +46,13 @@ class OpponentUserDetailsFragment :
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.friendsState.collect {
+                    if (it.isEmpty()) {
+                        binding.emptyState.visibility = View.VISIBLE
+                        binding.rvFriends.visibility = View.GONE
+                    } else {
+                        binding.emptyState.visibility = View.GONE
+                        binding.rvFriends.visibility = View.VISIBLE
+                    }
                     adapter.submitList(it.toMutableList())
                 }
             }
