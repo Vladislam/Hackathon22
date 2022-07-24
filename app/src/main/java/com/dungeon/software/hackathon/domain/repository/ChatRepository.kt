@@ -88,10 +88,16 @@ interface ChatRepository {
         }
 
         private suspend fun getGroupChat(chat: GroupChatDto): Flow<GroupChat> {
-            val users = chat.opponents.map { scope.async { userDataSource.getUser(it) } }.awaitAll()
-                .mapNotNull { it }.map {
-                    User(it)
-                }
+            val users =
+                chat.opponents.map { scope.async { userDataSource.getUser(it) } }.toMutableList()
+                    .apply {
+                        add(scope.async {
+                            userDataSource.getCurrentUser()
+                        })
+                    }.awaitAll()
+                    .mapNotNull { it }.map {
+                        User(it)
+                    }
             return messageDataSource.getMessages(chat.uid!!).mapNotNull { messageData ->
                 if (messageData is DataState.Data) {
                     GroupChat(messageData.data.map { currentMessage ->
