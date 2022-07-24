@@ -1,7 +1,9 @@
 package com.dungeon.software.hackathon.presentation.chat_screen
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -15,6 +17,7 @@ import com.dungeon.software.hackathon.databinding.FragmentChatBinding
 import com.dungeon.software.hackathon.domain.models.Chat
 import com.dungeon.software.hackathon.domain.models.Message
 import com.dungeon.software.hackathon.domain.models.User
+import com.dungeon.software.hackathon.presentation.MainActivity
 import com.dungeon.software.hackathon.util.FilePicker
 import kotlinx.coroutines.launch
 import kotlin.reflect.KClass
@@ -29,19 +32,21 @@ class ChatFragment : BaseVMFragment<ChatViewModel, FragmentChatBinding>() {
     private var currentChat: Chat? = null
     private var currentUser: User? = null
 
-    private var filePicker: FilePicker? = null
-
     private val adapter = ChatAdapter {}
 
     companion object {
         const val GROUP_CHAT_BUNDLE_TAG = "chat"
     }
 
+    override fun onStart() {
+        super.onStart()
+
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.rvChat.adapter = adapter
-        filePicker = FilePicker(requireActivity() as AppCompatActivity)
 
         viewModel.getCurrentUser()
         initObservers()
@@ -116,7 +121,7 @@ class ChatFragment : BaseVMFragment<ChatViewModel, FragmentChatBinding>() {
         btnSendFile.setOnClickListener {
             viewLifecycleOwner.lifecycleScope.launch {
                 currentChat?.let {
-                    val uri = filePicker?.getImageFile() ?: return@launch
+                    val uri = (requireActivity() as MainActivity).filePicker.getImageFile()
                     viewModel.sendImage(uri, it.uid, currentUser ?: return@launch)
                 }
             }

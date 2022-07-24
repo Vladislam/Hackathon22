@@ -8,8 +8,11 @@ import androidx.navigation.ui.setupWithNavController
 import com.dungeon.software.hackathon.R
 import com.dungeon.software.hackathon.base.activity.BaseBindingActivity
 import com.dungeon.software.hackathon.databinding.ActivityMainBinding
+import com.dungeon.software.hackathon.util.FilePicker
 
 class MainActivity : BaseBindingActivity<ActivityMainBinding>() {
+
+    val filePicker = FilePicker(this)
 
     override val layoutId: Int
         get() = R.layout.activity_main
