@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -121,7 +122,7 @@ class ChatFragment : BaseVMFragment<ChatViewModel, FragmentChatBinding>() {
         btnSendFile.setOnClickListener {
             viewLifecycleOwner.lifecycleScope.launch {
                 currentChat?.let {
-                    val uri = (requireActivity() as MainActivity).filePicker.getImageFile()
+                    val uri = (requireActivity() as MainActivity).filePicker.getTakeImageFile()
                     viewModel.sendImage(uri, it.uid, currentUser ?: return@launch)
                 }
             }

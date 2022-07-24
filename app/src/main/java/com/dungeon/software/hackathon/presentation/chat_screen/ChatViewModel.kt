@@ -10,6 +10,7 @@ import com.dungeon.software.hackathon.domain.repository.ChatRepository
 import com.dungeon.software.hackathon.domain.repository.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import java.io.File
 
 class ChatViewModel(
     private val chatRepository: ChatRepository,
@@ -27,13 +28,12 @@ class ChatViewModel(
         getCurrentUser()
     }
 
-    fun sendImage(uri: Uri, chatId: String, user: User) = launchRequest {
-        storageDataSource.saveFile(uri)
+    fun sendImage(uri: File, chatId: String, user: User) = launchRequest {
         sendMessage(
             Message(
                 "",
                 null,
-                uri.toString(),
+                storageDataSource.saveFile(uri),
                 null,
                 System.currentTimeMillis(),
                 false,
