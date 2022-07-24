@@ -82,6 +82,7 @@ class FriendSearchFragment : BaseVMFragment<FriendSearchViewModel, FragmentFrien
         etSearch.onTextChange {
             viewModel.searchUser(it)
         }
+
         fabCreateChat.setOnClickListener {
             val selected = adapter.itemsSelected
             viewModel.createChat(
@@ -100,10 +101,6 @@ class FriendSearchFragment : BaseVMFragment<FriendSearchViewModel, FragmentFrien
                     )
                 }
             )
-        }
-        // TODO: need for testing on other user!
-        adapter.addToFriends = {
-            viewModel.addToFriends(it)
         }
         lifecycleScope.launch {
             viewModel.friends.collect {

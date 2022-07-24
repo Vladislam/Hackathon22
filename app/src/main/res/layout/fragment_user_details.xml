@@ -55,10 +55,9 @@
 
         <TextView
             android:id="@+id/tvNameLabel"
-            style="@style/Theme.Hackathon22.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="12dp"
             android:layout_marginTop="18dp"
             android:text="@string/name"
             android:textColor="@color/black"
@@ -68,11 +67,9 @@
 
         <EditText
             android:id="@+id/etName"
-            style="@style/Theme.Hackathon22.Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="8dp"
+            android:layout_margin="8dp"
             android:autofillHints="username"
             android:inputType="textCapSentences"
             android:maxLines="1"
@@ -87,8 +84,8 @@
             android:id="@+id/tvEmailLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
             android:text="@string/email"
             android:textColor="@color/black"
             android:textSize="18sp"
@@ -97,14 +94,13 @@
 
         <TextView
             android:id="@+id/etEmail"
-            style="@style/Theme.Hackathon22.Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
             android:textColor="@color/black"
             android:textSize="18sp"
             android:text="@{user.email}"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="4dp"
             app:layout_constraintStart_toEndOf="@id/ivChatImage"
             app:layout_constraintTop_toBottomOf="@id/tvEmailLabel"
             tools:text="text@gmail.com" />
