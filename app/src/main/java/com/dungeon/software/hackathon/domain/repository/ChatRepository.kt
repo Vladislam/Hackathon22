@@ -94,7 +94,7 @@ interface ChatRepository {
                 chat.opponents.map { scope.async { userDataSource.getUser(it) } }.toMutableList()
                     .apply {
                         add(scope.async {
-                            userDataSource.getCurrentUser()
+                            userDataSource.getUser(chat.creator)
                         })
                     }.awaitAll()
                     .mapNotNull { it }.map {
@@ -116,7 +116,11 @@ interface ChatRepository {
         }
 
         override suspend fun getChats(): Flow<List<ChatData>> {
-            val chats = arrayListOf(scope.async { chatDataSource.getChatsByCreator() }, scope.async { chatDataSource.getChatsByOpponent() }).awaitAll().flatten()
+            val chats = arrayListOf(
+                scope.async { chatDataSource.getChatsByCreator() },
+                scope.async { chatDataSource.getChatsByOpponent() },
+                scope.async { chatDataSource.getGroupChatsByOpponent() }
+            ).awaitAll().flatten()
 
             return chats.mapNotNull {
                 when (it) {
@@ -136,7 +140,7 @@ interface ChatRepository {
                 chat.opponents.map { scope.async { userDataSource.getUser(it) } }.toMutableList()
                     .apply {
                         add(scope.async {
-                            userDataSource.getCurrentUser()
+                            userDataSource.getUser(chat.creator)
                         })
                     }.awaitAll()
                     .mapNotNull { it }.map { User(it) }

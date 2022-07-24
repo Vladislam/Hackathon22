@@ -30,6 +30,8 @@ interface ChatDataSource {
 
     suspend fun getChatsByOpponent(): ArrayList<ChatDataDto>
 
+    suspend fun getGroupChatsByOpponent(): ArrayList<ChatDataDto>
+
     suspend fun getChatsByCreator(): ArrayList<ChatDataDto>
 
     companion object {
@@ -153,6 +155,39 @@ interface ChatDataSource {
                 firestore
                     .collection(collectionChat)
                     .whereEqualTo("opponent", FirebaseAuth.getInstance().currentUser?.uid)
+                    .get()
+                    .addOnSuccessListener {
+                        scope.launch {
+                            emitter.resume(it.documents.mapNotNull {
+                                try {
+                                    it.toObject(GroupChatDto::class.java)?.apply {
+                                        if (opponents?.isEmpty() == true) {
+                                            throw IllegalStateException()
+                                        }
+                                    }
+                                } catch (e: Throwable) {
+                                    it.toObject(ChatDto::class.java)?.apply {
+                                        if (opponent?.isEmpty() == true) {
+                                            throw IllegalStateException()
+                                        }
+                                    }
+                                }
+                            }.toCollection(ArrayList()))
+                        }
+                    }
+                    .addOnFailureListener {
+                        emitter.resumeWithException(it)
+                    }
+            } ?: run {
+                emitter.resumeWithException(CustomError.SomethingWentWrong)
+            }
+        }
+
+        override suspend fun getGroupChatsByOpponent() = suspendCoroutine { emitter ->
+            FirebaseAuth.getInstance().currentUser?.also { user ->
+                firestore
+                    .collection(collectionChat)
+                    .whereArrayContains("opponents", FirebaseAuth.getInstance().currentUser?.uid.orEmpty())
                     .get()
                     .addOnSuccessListener {
                         scope.launch {
