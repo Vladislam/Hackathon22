@@ -13,7 +13,6 @@ import com.dangeon.software.notes.util.pop_up.PopUpManager
 import com.dungeon.software.hackathon.R
 import com.dungeon.software.hackathon.base.fragment.BaseVMFragment
 import com.dungeon.software.hackathon.databinding.FragmentSplashBinding
-import com.dungeon.software.hackathon.util.ext.hideBottomNav
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import kotlin.reflect.KClass
@@ -42,7 +41,6 @@ class SplashFragment : BaseVMFragment<SplashViewModel, FragmentSplashBinding>() 
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        hideBottomNav()
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 

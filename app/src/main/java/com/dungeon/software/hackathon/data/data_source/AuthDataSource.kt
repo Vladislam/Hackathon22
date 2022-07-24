@@ -99,7 +99,10 @@ interface AuthDataSource {
             )
         }
 
-        override suspend fun logout() = firebaseAuth.signOut()
+        override suspend fun logout() {
+            firebaseAuth.signOut()
+
+        }
 
     }
 }

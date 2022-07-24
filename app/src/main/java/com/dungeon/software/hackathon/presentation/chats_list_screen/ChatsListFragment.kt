@@ -6,11 +6,9 @@ import android.animation.LayoutTransition
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.ViewCompat.animate
 import com.dungeon.software.hackathon.R
 import com.dungeon.software.hackathon.base.fragment.BaseVMFragment
 import com.dungeon.software.hackathon.databinding.FragmentChatsListBinding
-import com.dungeon.software.hackathon.util.ext.showBottomNav
 import kotlin.reflect.KClass
 
 class ChatsListFragment : BaseVMFragment<ChatsListViewModel, FragmentChatsListBinding>() {
@@ -24,8 +22,6 @@ class ChatsListFragment : BaseVMFragment<ChatsListViewModel, FragmentChatsListBi
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        showBottomNav()
 
         sortState.attach(binding, viewLifecycleOwner.lifecycle)
         setupListeners()

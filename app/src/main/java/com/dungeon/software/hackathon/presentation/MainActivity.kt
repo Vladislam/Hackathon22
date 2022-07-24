@@ -1,6 +1,8 @@
 package com.dungeon.software.hackathon.presentation
 
 import android.os.Bundle
+import android.view.View
+import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.dungeon.software.hackathon.R
@@ -15,11 +17,26 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding.bottomNavigation.setupWithNavController((supportFragmentManager.findFragmentById(R.id.fragment_container_view) as NavHostFragment).navController)
+        val navController = (supportFragmentManager.findFragmentById(R.id.fragment_container_view) as NavHostFragment).navController
+        navController.addOnDestinationChangedListener { controller, destination, argument ->
+            destination.setVisibilityBottomNav()
+        }
+        binding.bottomNavigation.setupWithNavController(navController)
     }
 
-    fun changeBottomNavigationVisibility(visibility: Int) {
+    private fun changeBottomNavigationVisibility(visibility: Int) {
         binding.bottomNavigation.visibility = visibility
+    }
+
+    private fun NavDestination.setVisibilityBottomNav() {
+        changeBottomNavigationVisibility(
+            when (id) {
+                R.id.chatsListFragment -> View.VISIBLE
+                R.id.friendSearchFragment -> View.VISIBLE
+                R.id.userDetailsFragment3 -> View.VISIBLE
+                else -> View.GONE
+            }
+        )
     }
 
 }
