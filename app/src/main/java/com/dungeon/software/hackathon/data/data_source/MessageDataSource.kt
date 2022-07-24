@@ -10,9 +10,13 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -38,35 +42,37 @@ interface MessageDataSource {
 
         private val messages = "messages"
 
-        override fun getLastMessage(chatId: String) = flow<DataState<MessageDataDto?>> {
+        override fun getLastMessage(chatId: String) = callbackFlow<DataState<MessageDataDto?>> {
             FirebaseAuth.getInstance().currentUser?.also { user ->
-                lastMessagesSubscription.add(firestore
+                var subs: ListenerRegistration = firestore
                     .collection(ChatDataSource.collectionChat)
                     .document(user.uid)
                     .collection(ChatDataSource.collection)
                     .document(chatId)
                     .collection(messages)
+                    .orderBy("timeSent")
                     .limitToLast(1)
                     .addSnapshotListener { snapshot, error ->
                         scope.launch {
                             error?.let {
-                                this@flow.emit(DataState.Error(it))
+                                this@callbackFlow.send(DataState.Error(it))
                             }
                             snapshot?.let { data ->
                                 try {
                                     data.toObjects(MessageDto::class.java).also {
-                                        emit(DataState.Data(it.toCollection(ArrayList()).firstOrNull()))
+                                        send(DataState.Data(it.toCollection(ArrayList()).firstOrNull()))
                                     }
                                 } catch (e: Throwable) {
                                     data.toObjects(MessageGroupDto::class.java).run {
-                                        this@flow.emit(DataState.Data(this.toCollection(ArrayList()).firstOrNull()))
+                                        send(DataState.Data(this.toCollection(ArrayList()).firstOrNull()))
                                     }
                                 }
                             }
                         }
-                    })
+                    }
+                awaitClose { subs.remove() }
             } ?: run {
-                emit(DataState.Error(CustomError.SomethingWentWrong))
+                send(DataState.Error(CustomError.SomethingWentWrong))
             }
         }
 
@@ -109,8 +115,9 @@ interface MessageDataSource {
                                         emit(DataState.Data(it.toCollection(ArrayList())))
                                     }
                                 } catch (e: Throwable) {
+                                    Timber.v(e)
                                     data.toObjects(MessageGroupDto::class.java).run {
-                                        this@flow.emit(DataState.Data(this.toCollection(ArrayList())))
+                                        emit(DataState.Data(this.toCollection(ArrayList())))
                                     }
                                 }
                             }

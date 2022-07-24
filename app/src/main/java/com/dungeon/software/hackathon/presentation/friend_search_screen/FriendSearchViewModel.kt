@@ -8,6 +8,7 @@ import com.dungeon.software.hackathon.domain.models.User
 import com.dungeon.software.hackathon.domain.repository.ChatRepository
 import com.dungeon.software.hackathon.domain.repository.UserRepository
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -54,6 +55,7 @@ class FriendSearchViewModel(
                 if (query.isEmpty()) {
                     _friends.emit(userRepository.getFriends())
                 } else {
+                    delay(300)
                     _friends.emit(userRepository.getUserList(query))
                 }
             }.onFailure {

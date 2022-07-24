@@ -1,6 +1,5 @@
 package com.dungeon.software.hackathon.presentation.friend_search_screen
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Lifecycle
@@ -42,7 +41,6 @@ class FriendSearchFragment : BaseVMFragment<FriendSearchViewModel, FragmentFrien
         initObservers()
     }
 
-    @SuppressLint("UnsafeRepeatOnLifecycleDetector")
     private fun initObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
