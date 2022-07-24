@@ -60,7 +60,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:elevation="8dp"
-                    android:text="@string/no_chats"
+                    android:text="@string/no_user"
                     android:visibility="gone" />
 
                 <androidx.recyclerview.widget.RecyclerView
