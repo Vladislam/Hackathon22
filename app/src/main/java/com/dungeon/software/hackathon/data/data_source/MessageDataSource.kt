@@ -52,13 +52,13 @@ interface MessageDataSource {
                             error?.let {
                                 this@flow.emit(DataState.Error(it))
                             }
-                            snapshot?.let {
+                            snapshot?.let { data ->
                                 try {
-                                    it.toObjects(MessageDto::class.java)?.also {
+                                    data.toObjects(MessageDto::class.java).also {
                                         emit(DataState.Data(it.toCollection(ArrayList()).firstOrNull()))
                                     }
                                 } catch (e: Throwable) {
-                                    it.toObjects(MessageGroupDto::class.java)?.run {
+                                    data.toObjects(MessageGroupDto::class.java).run {
                                         this@flow.emit(DataState.Data(this.toCollection(ArrayList()).firstOrNull()))
                                     }
                                 }
@@ -103,13 +103,13 @@ interface MessageDataSource {
                             error?.let {
                                 this@flow.emit(DataState.Error(it))
                             }
-                            snapshot?.let {
+                            snapshot?.let { data ->
                                 try {
-                                    it.toObjects(MessageDto::class.java)?.also {
+                                    data.toObjects(MessageDto::class.java).also {
                                         emit(DataState.Data(it.toCollection(ArrayList())))
                                     }
                                 } catch (e: Throwable) {
-                                    it.toObjects(MessageGroupDto::class.java)?.run {
+                                    data.toObjects(MessageGroupDto::class.java).run {
                                         this@flow.emit(DataState.Data(this.toCollection(ArrayList())))
                                     }
                                 }

@@ -50,7 +50,7 @@ interface ChatRepository {
         }
 
         private suspend fun getGroupChat(chat: ChatDto): Flow<Chat> {
-            val user = User(userDataSource.fetchUser(chat.opponent)!!)
+            val user = User(userDataSource.getUser(chat.opponent)!!)
             return messageDataSource.getMessages(chat.uid!!).mapNotNull {
                 if (it is DataState.Data) {
                     Chat(it.data.map { Message(it as MessageDto, user) }, chat, user)
@@ -62,7 +62,7 @@ interface ChatRepository {
         }
 
         private suspend fun getPeerToPeerChat(chat: GroupChatDto): Flow<GroupChat> {
-            val users = chat.opponents.map { scope.async { userDataSource.fetchUser(it) } }.awaitAll().mapNotNull { it }.map {
+            val users = chat.opponents.map { scope.async { userDataSource.getUser(it) } }.awaitAll().mapNotNull { it }.map {
                 User(it)
             }
             return messageDataSource.getMessages(chat.uid!!).mapNotNull { messageData ->
@@ -92,7 +92,7 @@ interface ChatRepository {
         }
 
         private suspend fun getLastGroupChat(chat: ChatDto): Flow<Chat> {
-            val user = User(userDataSource.fetchUser(chat.opponent)!!)
+            val user = User(userDataSource.getUser(chat.opponent)!!)
             return messageDataSource.getLastMessage(chat.uid!!).mapNotNull {
                 if (it is DataState.Data) {
                     Chat(listOf(Message(it as MessageDto, user)), chat, user)

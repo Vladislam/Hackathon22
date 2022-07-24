@@ -3,6 +3,7 @@ package com.dungeon.software.hackathon.data.data_source
 import com.dangeon.software.notes.util.pop_up.CustomError
 import com.dungeon.software.hackathon.data.models.UserDto
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
@@ -12,11 +13,13 @@ import kotlin.coroutines.suspendCoroutine
 
 interface UserDataSource {
 
-    suspend fun fetchListUsers(): List<UserDto>
+    suspend fun getListUsersByName(query: String, ascending: Boolean): List<UserDto>
 
-    suspend fun fetchCurrentUser(): UserDto
+    suspend fun getListUsersByEmail(query: String, ascending: Boolean): List<UserDto>
 
-    suspend fun fetchUser(id: String): UserDto?
+    suspend fun getCurrentUser(): UserDto
+
+    suspend fun getUser(id: String): UserDto?
 
     suspend fun addToFriends(user: UserDto)
 
@@ -28,18 +31,35 @@ interface UserDataSource {
 
     class Base(private val firestore: FirebaseFirestore) : UserDataSource {
 
-        override suspend fun fetchListUsers(): List<UserDto> = suspendCoroutine { continuation ->
+        override suspend fun getListUsersByName(query: String, ascending: Boolean): List<UserDto> = suspendCoroutine { continuation ->
             firestore.collection(USERS_COLLECTION)
+                .addStringEqualIfNotEmpty("name", query)
                 .get()
                 .addOnSuccessListener { querySnapshot ->
-                    continuation.resume(querySnapshot.toObjects(UserDto::class.java))
+                    continuation.resume(querySnapshot.toObjects(UserDto::class.java).sortByDescendingOrAscending(ascending, { it.name }))
                 }
                 .addOnFailureListener { exception ->
                     continuation.resumeWithException(exception)
                 }
         }
 
-        override suspend fun fetchCurrentUser(): UserDto = suspendCoroutine { continuation ->
+        override suspend fun getListUsersByEmail(query: String, ascending: Boolean): List<UserDto> = suspendCoroutine { continuation ->
+            firestore.collection(USERS_COLLECTION)
+                .addStringEqualIfNotEmpty("email", query)
+                .get()
+                .addOnSuccessListener { querySnapshot ->
+                    continuation.resume(querySnapshot.toObjects(UserDto::class.java).sortByDescendingOrAscending(ascending, { it.email }))
+                }
+                .addOnFailureListener { exception ->
+                    continuation.resumeWithException(exception)
+                }
+        }
+
+        private fun <T> List<T>.sortByDescendingOrAscending(ascending: Boolean, compare: (T) -> String) = if (ascending) this.sortedBy { compare(it) } else sortedByDescending { compare(it) }
+
+        private fun CollectionReference.addStringEqualIfNotEmpty(data: String, value: String) = if (value.isEmpty()) this else this.whereEqualTo(data, value)
+
+        override suspend fun getCurrentUser(): UserDto = suspendCoroutine { continuation ->
             firestore.collection(USERS_COLLECTION)
                 .document(FirebaseAuth.getInstance().currentUser?.uid ?: "")
                 .get()
@@ -53,7 +73,7 @@ interface UserDataSource {
                 }
         }
 
-        override suspend fun fetchUser(id: String): UserDto? = suspendCoroutine { continuation ->
+        override suspend fun getUser(id: String): UserDto? = suspendCoroutine { continuation ->
             firestore.collection(USERS_COLLECTION)
                 .document(id)
                 .get()

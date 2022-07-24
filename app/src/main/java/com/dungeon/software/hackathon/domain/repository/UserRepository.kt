@@ -5,10 +5,12 @@ import com.dungeon.software.hackathon.data.data_source.StorageDataSource
 import com.dungeon.software.hackathon.data.models.UserDto
 import com.dungeon.software.hackathon.data.data_source.UserDataSource
 import com.dungeon.software.hackathon.domain.models.User
+import com.dungeon.software.hackathon.presentation.chats_list_screen.SortState
+import com.dungeon.software.hackathon.presentation.chats_list_screen.SortType
 
 interface UserRepository {
 
-    suspend fun fetchListUsers(): List<User>
+    suspend fun getUserList(sortState: SortState): List<User>
 
     suspend fun fetchCurrentUser(): User
 
@@ -24,13 +26,24 @@ interface UserRepository {
 
     class Base(private val userDataSource: UserDataSource, private val storageDataSource: StorageDataSource) : UserRepository {
 
-        override suspend fun fetchListUsers(): List<User> =
-            userDataSource.fetchListUsers().map { User(it) }
+        override suspend fun getUserList(sortState: SortState): List<User> {
+            val type = sortState.sortType
+            return when (type) {
+                is SortType.Name -> {
+                    userDataSource.getListUsersByName(sortState.query, !type.desc)
+                }
+                is SortType.LastMessageTime -> {
+                    userDataSource.getListUsersByEmail(sortState.query, !type.desc)
+                }
+            }.map {
+                User(it)
+            }
+        }
 
-        override suspend fun fetchCurrentUser(): User = User(userDataSource.fetchCurrentUser())
+        override suspend fun fetchCurrentUser(): User = User(userDataSource.getCurrentUser())
 
         override suspend fun fetchUser(id: String): User? =
-            userDataSource.fetchUser(id)?.let { User(it) }
+            userDataSource.getUser(id)?.let { User(it) }
 
         override suspend fun createUser(user: User) = userDataSource.createUser(UserDto(user))
 
