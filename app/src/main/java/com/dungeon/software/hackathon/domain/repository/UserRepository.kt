@@ -24,6 +24,8 @@ interface UserRepository {
 
     suspend fun changeImage(url: Uri)
 
+    suspend fun deleteFile(url: String) : String
+
     suspend fun changeName(id: String, name: String)
 
     suspend fun getFriends(): List<User>
@@ -51,6 +53,8 @@ interface UserRepository {
         override suspend fun changeImage(url: Uri) {
             userDataSource.changeImage(storageDataSource.saveFile(url))
         }
+
+        override suspend fun deleteFile(url: String) : String = storageDataSource.deleteFile(url)
 
         override suspend fun changeName(id: String, name: String) = userDataSource.changeName(id, name)
 

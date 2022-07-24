@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="user"
+            type="com.dungeon.software.hackathon.domain.models.User" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -71,6 +73,7 @@
             android:autofillHints="username"
             android:inputType="textCapSentences"
             android:maxLines="1"
+            android:text="@{user.name}"
             android:hint="@string/name"
             app:layout_constraintStart_toEndOf="@id/ivChatImage"
             app:layout_constraintTop_toBottomOf="@id/tvNameLabel"
@@ -97,6 +100,7 @@
             android:layout_marginTop="12dp"
             android:textColor="@color/black"
             android:textSize="18sp"
+            android:text="@{user.email}"
             app:layout_constraintStart_toEndOf="@id/ivChatImage"
             app:layout_constraintTop_toBottomOf="@id/tvEmailLabel"
             tools:text="text@gmail.com" />

@@ -30,6 +30,10 @@ class UserDetailsViewModel(
         launchRequest { userRepository.changeImage(url) }
     }
 
+    fun deleteFile(url: String){
+        launchRequest { userRepository.deleteFile(url) }
+    }
+
     fun logout() {
         launchRequest {
             authRepository.logout()

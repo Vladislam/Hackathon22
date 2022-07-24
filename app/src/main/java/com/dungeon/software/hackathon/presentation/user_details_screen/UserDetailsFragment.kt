@@ -31,6 +31,7 @@ class UserDetailsFragment : BaseVMFragment<UserDetailsViewModel, FragmentUserDet
                 it.data?.data?.let { selectedImageUri ->
                     // Get the path from the Uri
                     binding.ivChatImage.setImageURI(null)
+                    viewModel.deleteFile(binding.user?.imageUrl ?: "")
                     Glide.with(requireContext())
                         .load(selectedImageUri)
                         .transform(CircleCrop())
@@ -76,8 +77,7 @@ class UserDetailsFragment : BaseVMFragment<UserDetailsViewModel, FragmentUserDet
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.currentUser.collect { user ->
                 binding.apply {
-                    etEmail.text = user.email
-                    etName.setText(user.name)
+                    setUser(user)
                     Glide.with(requireContext())
                         .load(user.imageUrl)
                         .error(R.drawable.portrait_placeholder)

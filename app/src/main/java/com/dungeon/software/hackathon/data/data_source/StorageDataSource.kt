@@ -61,5 +61,15 @@ class StorageDataSource {
             }
     }
 
+    suspend fun deleteFile(uri: String) = suspendCoroutine { continuation ->
+        storage.getReferenceFromUrl(uri).delete()
+            .addOnSuccessListener {
+                continuation.resume(uri)
+            }
+            .addOnFailureListener {
+                continuation.resumeWithException(it)
+            }
+    }
+
 
 }
