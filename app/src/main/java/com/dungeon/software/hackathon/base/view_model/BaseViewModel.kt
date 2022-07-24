@@ -4,9 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dangeon.software.notes.util.pop_up.CustomError
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.*
 import kotlin.coroutines.CoroutineContext
 
 abstract class BaseViewModel : ViewModel() {
@@ -14,8 +13,8 @@ abstract class BaseViewModel : ViewModel() {
     protected val _loadingFlow = MutableStateFlow(false)
     val loadingFlow: SharedFlow<Boolean> = _loadingFlow
 
-    protected val _errorMessage = MutableSharedFlow<String>()
-    val errorMessage: SharedFlow<String> = _errorMessage
+    protected val _error = Channel<CustomError>()
+    val error: Flow<CustomError> = _error.consumeAsFlow()
 
     protected fun launchRequest(
         context: CoroutineContext = Dispatchers.IO,

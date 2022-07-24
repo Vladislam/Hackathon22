@@ -19,8 +19,6 @@ import kotlin.reflect.KClass
 
 class SplashFragment : BaseVMFragment<SplashViewModel, FragmentSplashBinding>() {
 
-    private val popUpManager: PopUpManager by inject()
-
     override val layoutId: Int
         get() = R.layout.fragment_splash
 

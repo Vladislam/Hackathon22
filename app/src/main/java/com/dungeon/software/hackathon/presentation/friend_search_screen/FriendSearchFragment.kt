@@ -1,5 +1,6 @@
 package com.dungeon.software.hackathon.presentation.friend_search_screen
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Lifecycle
@@ -40,6 +41,7 @@ class FriendSearchFragment : BaseVMFragment<FriendSearchViewModel, FragmentFrien
         initObservers()
     }
 
+    @SuppressLint("UnsafeRepeatOnLifecycleDetector")
     private fun initObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -75,30 +77,6 @@ class FriendSearchFragment : BaseVMFragment<FriendSearchViewModel, FragmentFrien
                 }
             }
         }
-        adapter.submitList(
-            mutableListOf(
-                User(
-                    "",
-                    "Monkey",
-                    "monkey@gmail.com",
-                    "https://media.npr.org/assets/img/2017/09/12/macaca_nigra_self-portrait-3e0070aa19a7fe36e802253048411a38f14a79f8-s800-c85.webp",
-                    emptyList()
-                ),
-                User(
-                    "",
-                    "Cat",
-                    "cat@gmail.com",
-                    "https://cdn.pixabay.com/photo/2020/03/23/08/45/cat-4959941_960_720.jpg",
-                    emptyList()
-                ),
-                User(
-                    "", "Monkey", "monkey@gmail.com", null, emptyList()
-                ),
-                User(
-                    "", "Monkey", "monkey@gmail.com", null, emptyList()
-                ),
-            )
-        )
     }
 
     private fun setupListeners() = with(binding) {
@@ -120,6 +98,11 @@ class FriendSearchFragment : BaseVMFragment<FriendSearchViewModel, FragmentFrien
                     )
                 }
             )
+        }
+        lifecycleScope.launch {
+            viewModel.friends.collect {
+                adapter.submitList(it.toMutableList())
+            }
         }
     }
 }

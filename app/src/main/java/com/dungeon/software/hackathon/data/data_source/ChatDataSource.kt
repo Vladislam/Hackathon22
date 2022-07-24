@@ -4,14 +4,11 @@ import com.dangeon.software.notes.util.pop_up.CustomError
 import com.dungeon.software.hackathon.data.models.ChatDataDto
 import com.dungeon.software.hackathon.data.models.ChatDto
 import com.dungeon.software.hackathon.data.models.GroupChatDto
-import com.dungeon.software.hackathon.util.DataState
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -29,8 +26,6 @@ interface ChatDataSource {
 
     suspend fun getChats(): ArrayList<ChatDataDto>
 
-    fun cancelChatSubscription()
-
     companion object {
         val collectionChat = "chat"
         val collection = "collection"
@@ -41,8 +36,6 @@ interface ChatDataSource {
         private val firestore = FirebaseFirestore.getInstance()
 
         private val scope = CoroutineScope(Dispatchers.IO)
-
-        private var chatSubscription: ListenerRegistration? = null
 
         override suspend fun createChat(chatModel: ChatDataDto) = suspendCoroutine { emitter ->
             val user = FirebaseAuth.getInstance().currentUser ?: run {
@@ -140,24 +133,22 @@ interface ChatDataSource {
 
         override suspend fun getChats() = suspendCoroutine<ArrayList<ChatDataDto>> { emitter ->
             FirebaseAuth.getInstance().currentUser?.also { user ->
-                cancelChatSubscription()
-                chatSubscription = firestore
+                firestore
                     .collection(collectionChat)
                     .document(user.uid)
                     .collection(collection)
-                    .addSnapshotListener { snapshot, error ->
+                    .get()
+                    .addOnSuccessListener {
                         scope.launch {
-                            error?.let {
-                                emitter.resumeWithException(it)
-                            }
-                            snapshot?.let {
-                                try {
-                                    emitter.resume(it.toObjects(ChatDto::class.java).toCollection(ArrayList()))
-                                } catch (e: Throwable) {
-                                    emitter.resume(it.toObjects(GroupChatDto::class.java).toCollection(ArrayList()))
-                                }
+                            try {
+                                emitter.resume(it.toObjects(ChatDto::class.java).toCollection(ArrayList()))
+                            } catch (e: Throwable) {
+                                emitter.resume(it.toObjects(GroupChatDto::class.java).toCollection(ArrayList()))
                             }
                         }
+                    }
+                    .addOnFailureListener {
+                        emitter.resumeWithException(it)
                     }
             } ?: run {
                 emitter.resumeWithException(CustomError.SomethingWentWrong)
@@ -182,11 +173,6 @@ interface ChatDataSource {
                         emitter.resumeWithException(NullPointerException())
                     }
                 }
-        }
-
-        override fun cancelChatSubscription() {
-            chatSubscription?.remove()
-            chatSubscription = null
         }
     }
 

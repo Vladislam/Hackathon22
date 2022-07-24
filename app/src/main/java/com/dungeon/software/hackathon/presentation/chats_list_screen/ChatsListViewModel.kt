@@ -1,6 +1,7 @@
 package com.dungeon.software.hackathon.presentation.chats_list_screen
 
 import androidx.lifecycle.viewModelScope
+import com.dangeon.software.notes.util.pop_up.CustomError
 import com.dungeon.software.hackathon.base.view_model.BaseViewModel
 import com.dungeon.software.hackathon.domain.models.ChatData
 import com.dungeon.software.hackathon.domain.repository.ChatRepository
@@ -66,7 +67,7 @@ class ChatsListViewModel(
                     _chatsState.emit(it)
                 }
             }.onFailure {
-                _errorMessage.emit(it.message ?: "Unexpected error")
+                _error.send(CustomError.parse(it))
                 Timber.e(it)
             }
         }

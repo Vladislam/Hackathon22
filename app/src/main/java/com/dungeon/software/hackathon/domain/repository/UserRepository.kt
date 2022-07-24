@@ -8,6 +8,7 @@ import com.dungeon.software.hackathon.domain.models.User
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 
 interface UserRepository {
 
@@ -24,6 +25,8 @@ interface UserRepository {
     suspend fun changeImage(url: Uri)
 
     suspend fun changeName(id: String, name: String)
+
+    suspend fun getFriends(): List<User>
 
     class Base(private val userDataSource: UserDataSource, private val storageDataSource: StorageDataSource) : UserRepository {
 
@@ -50,5 +53,9 @@ interface UserRepository {
         }
 
         override suspend fun changeName(id: String, name: String) = userDataSource.changeName(id, name)
+
+        override suspend fun getFriends(): List<User> =
+            userDataSource.getCurrentUser().friends.map { scope.async { userDataSource.getUser(it) } }.awaitAll().mapNotNull { it }.map { User(it) }
+
     }
 }

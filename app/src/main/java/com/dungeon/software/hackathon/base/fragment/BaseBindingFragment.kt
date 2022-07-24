@@ -9,9 +9,11 @@ import androidx.annotation.StringRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import com.dangeon.software.notes.util.pop_up.PopUpManager
 import com.dungeon.software.hackathon.base.dialog.BaseProgressDialog
 import com.dungeon.software.hackathon.presentation.MainActivity
 import com.google.android.material.snackbar.Snackbar
+import org.koin.android.ext.android.get
 
 abstract class BaseBindingFragment<Binding : ViewDataBinding> : Fragment() {
 
@@ -19,6 +21,7 @@ abstract class BaseBindingFragment<Binding : ViewDataBinding> : Fragment() {
     protected val binding get() = _binding!!
 
     var baseProgressDialog: BaseProgressDialog? = null
+    protected val popUpManager = get<PopUpManager>()
 
     @get:LayoutRes
     protected abstract val layoutId: Int
