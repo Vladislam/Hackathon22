@@ -52,7 +52,8 @@ class UserDetailsFragment : BaseVMFragment<UserDetailsViewModel, FragmentUserDet
         super.onViewCreated(view, savedInstanceState)
 
         binding.etName.onTextChange {
-            viewModel.changeName(it)
+            if (it.isNotBlank())
+                viewModel.changeName(it)
         }
 
         binding.btnLogOut.setOnClickListener {

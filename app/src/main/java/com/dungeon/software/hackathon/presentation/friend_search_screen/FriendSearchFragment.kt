@@ -13,6 +13,7 @@ import com.dungeon.software.hackathon.databinding.FragmentFriendSearchBinding
 import com.dungeon.software.hackathon.domain.models.Chat
 import com.dungeon.software.hackathon.domain.models.GroupChat
 import com.dungeon.software.hackathon.domain.models.User
+import com.dungeon.software.hackathon.util.ext.onTextChange
 import kotlinx.coroutines.launch
 import kotlin.reflect.KClass
 
@@ -80,6 +81,9 @@ class FriendSearchFragment : BaseVMFragment<FriendSearchViewModel, FragmentFrien
     }
 
     private fun setupListeners() = with(binding) {
+        etSearch.onTextChange {
+            viewModel.searchUser(it)
+        }
         fabCreateChat.setOnClickListener {
             val selected = adapter.itemsSelected
             viewModel.createChat(
