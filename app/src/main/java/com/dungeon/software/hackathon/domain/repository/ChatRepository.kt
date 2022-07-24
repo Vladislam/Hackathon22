@@ -37,14 +37,12 @@ interface ChatRepository {
             return if (chat is Chat) {
                 val createdChat = chatDataSource.getPeerToPeerChatByOpponent(chat.opponent.uid)
                 return if (createdChat == null) {
-                    chatDataSource.createChat(chat.toDto())
-                    chat
+                    chat.copy(uid = chatDataSource.createChat(chat.toDto()))
                 } else {
                     Chat(chat.messages, createdChat.getUid().orEmpty(), chat.opponent)
                 }
             } else {
-                chatDataSource.createChat(chat.toDto())
-                chat
+                (chat as GroupChat).copy(uid = chatDataSource.createChat(chat.toDto()))
             }
         }
 
@@ -73,9 +71,15 @@ interface ChatRepository {
 
         private suspend fun getPeerToPeerChat(chat: ChatDto): Flow<Chat> {
             val user = User(userDataSource.getUser(chat.opponent)!!)
+            val currentUser = User(userDataSource.getCurrentUser())
             return messageDataSource.getMessages(chat.uid!!).mapNotNull {
                 if (it is DataState.Data) {
-                    Chat(it.data.map { Message(it as MessageDto, user) }, chat, user)
+                    Chat(it.data.map {
+                        Message(
+                            it as MessageDto,
+                            if (it.userUid == currentUser.uid) currentUser else user
+                        )
+                    }, chat, user)
                 } else {
                     null
                 }
@@ -120,10 +124,19 @@ interface ChatRepository {
         }
 
         private suspend fun getLastGroupChat(chat: GroupChatDto): Flow<GroupChat> {
-            val users = chat.opponents.map { scope.async { userDataSource.getUser(it) } }.awaitAll().mapNotNull { it }.map { User(it) }
+            val users =
+                chat.opponents.map { scope.async { userDataSource.getUser(it) } }.toMutableList()
+                    .apply {
+                        add(scope.async {
+                            userDataSource.getCurrentUser()
+                        })
+                    }.awaitAll()
+                    .mapNotNull { it }.map { User(it) }
             return messageDataSource.getLastMessage(chat.uid!!).mapNotNull {
                 if (it is DataState.Data) {
-                    val data = (it.data as MessageGroupDto?)?.run { listOf(MessageGroup(this, users)) } ?: listOf()
+                    val data =
+                        (it.data as MessageGroupDto?)?.run { listOf(MessageGroup(this, users)) }
+                            ?: listOf()
                     GroupChat(data, chat, users)
                 } else {
                     null
@@ -136,7 +149,8 @@ interface ChatRepository {
             val user = User(userDataSource.getUser(chat.opponent)!!)
             return messageDataSource.getLastMessage(chat.uid!!).mapNotNull {
                 if (it is DataState.Data) {
-                    val data = (it.data as MessageDto?)?.run { listOf(Message(this, user)) } ?: listOf()
+                    val data =
+                        (it.data as MessageDto?)?.run { listOf(Message(this, user)) } ?: listOf()
                     Chat(data, chat, user)
                 } else {
                     null

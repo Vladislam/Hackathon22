@@ -38,9 +38,10 @@ class ChatFragment : BaseVMFragment<ChatViewModel, FragmentChatBinding>() {
 
         binding.rvChat.adapter = adapter
 
+        viewModel.getCurrentUser()
+        initObservers()
         setupListeners()
         handleArguments()
-        initObservers()
     }
 
     private fun initObservers() {
@@ -65,7 +66,7 @@ class ChatFragment : BaseVMFragment<ChatViewModel, FragmentChatBinding>() {
         currentChat = arguments?.getParcelable(GROUP_CHAT_BUNDLE_TAG)
         currentChat?.let {
             binding.chat = it
-            viewModel.getChat(it.uid)
+            viewModel.getChat(currentChat?.uid ?: return)
         }
     }
 
@@ -106,6 +107,9 @@ class ChatFragment : BaseVMFragment<ChatViewModel, FragmentChatBinding>() {
             } else {
                 showMessage(getString(R.string.enter_message_without_dots))
             }
+        }
+        btnSendFile.setOnClickListener {
+
         }
         ibBack.setOnClickListener {
             findNavController().popBackStack()

@@ -55,16 +55,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
-                    <TextView
-                        android:id="@+id/textViewContent"
-                        style="@style/Theme.Hackathon22.Text"
+                    <ImageView
+                        android:id="@+id/ivImage"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
+                        android:contentDescription="@string/image"
                         android:maxWidth="250dp"
-                        android:text="@{message.messageText}"
-                        android:textColor="@{message.isMine ? @color/white : @color/black}"
-                        android:textSize="16sp"
-                        tools:text="kldfjhklgkhldfkljhdfgh jdgjhhjdfjkljk; hghjd;fghdhgkhf dgkhljdfgkhjdfkgj   dfghjdflhjdfklh;hkd            hkdlfjgh;lkdh" />
+                        android:maxHeight="250dp"
+                        app:loadImage="@{message.messageImageUrl}"
+                        tools:src="@drawable/portrait_placeholder" />
 
                     <TextView
                         android:id="@+id/tvTimeSent"

@@ -29,7 +29,7 @@ class GroupChatViewModel(
         chatRepository.sendMessage(message, id)
     }
 
-    private fun getCurrentUser() = launchRequest {
+    fun getCurrentUser() = launchRequest {
         _currentUser.emit(userRepository.fetchCurrentUser())
     }
 

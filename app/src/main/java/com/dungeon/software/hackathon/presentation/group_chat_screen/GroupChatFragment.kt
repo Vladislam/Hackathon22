@@ -37,6 +37,7 @@ class GroupChatFragment : BaseVMFragment<GroupChatViewModel, FragmentGroupChatBi
 
         binding.rvChat.adapter = adapter
 
+        viewModel.getCurrentUser()
         initObservers()
         handleArguments()
         setupListeners()
@@ -64,7 +65,7 @@ class GroupChatFragment : BaseVMFragment<GroupChatViewModel, FragmentGroupChatBi
         currentChat = arguments?.getParcelable(GROUP_CHAT_BUNDLE_TAG)
         currentChat?.let {
             binding.chat = it
-            viewModel.getChat(it.uid)
+            viewModel.getChat(currentChat?.uid ?: return@let)
         }
     }
 
