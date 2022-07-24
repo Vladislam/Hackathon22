@@ -6,9 +6,10 @@ import com.google.firebase.firestore.DocumentId
 data class ChatDto(
     @DocumentId
     val uid: String? = null,
-    val opponent: String = ""
+    val opponent: String = "",
+    val creator: String = ""
 ) : ChatDataDto {
 
-    constructor(chat: Chat) : this(chat.uid, chat.opponent.uid)
+    constructor(chat: Chat, creator: String) : this(chat.uid, chat.opponent.uid, creator)
 
 }

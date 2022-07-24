@@ -44,8 +44,6 @@ interface MessageDataSource {
             FirebaseAuth.getInstance().currentUser?.also { user ->
                 val subs: ListenerRegistration = firestore
                     .collection(ChatDataSource.collectionChat)
-                    .document(user.uid)
-                    .collection(ChatDataSource.collection)
                     .document(chatId)
                     .collection(messages)
                     .orderBy("timeSent")
@@ -86,8 +84,6 @@ interface MessageDataSource {
                 }
                 firestore
                     .collection(ChatDataSource.collectionChat)
-                    .document(user.uid)
-                    .collection(ChatDataSource.collection)
                     .document(chatId)
                     .collection(messages)
                     .add(message)
@@ -104,8 +100,6 @@ interface MessageDataSource {
                 FirebaseAuth.getInstance().currentUser?.also { user ->
                     val subscription = firestore
                         .collection(ChatDataSource.collectionChat)
-                        .document(user.uid)
-                        .collection(ChatDataSource.collection)
                         .document(chatId)
                         .collection(messages)
                         .addSnapshotListener { snapshot, error ->

@@ -8,9 +8,10 @@ data class GroupChatDto(
     val uid: String? = null,
     val name: String = "",
     val opponents: List<String> = listOf(),
-    val imageUrl: String? = null
+    val imageUrl: String? = null,
+    val creator: String = ""
 ) : ChatDataDto {
 
-    constructor(chat: GroupChat) : this(chat.uid, chat.name, chat.opponents.map { it.uid }, chat.imageUrl)
+    constructor(chat: GroupChat, creator: String) : this(chat.uid, chat.name, chat.opponents.map { it.uid }, chat.imageUrl, creator)
 
 }
